@@ -90,7 +90,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-black text-slate-900 tracking-tight">DeduceMed <span class="bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">Pro Max V3.1</span></h1>
-                    <p class="text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">48 Conditions • 138 Clinical Symptoms • Sigmoidal Logic</p>
+                    <p class="text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">62 Conditions • 138 Symptoms • 8 Context Factors • Sigmoidal Logic</p>
                 </div>
             </div>
             
@@ -168,6 +168,103 @@
                     <button onclick="clearSymptomEngine()" class="text-slate-400 hover:text-white text-xs font-bold px-3 py-2 transition ml-auto flex items-center gap-1">
                         <i class="fa-solid fa-rotate-left"></i> Reset Lab
                     </button>
+                </div>
+            </div>
+
+            <!-- Patient Context Panel -->
+            <div class="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <div>
+                        <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card-clip text-indigo-600"></i> Patient Context
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Non-symptom risk factors — these re-weight the differential instead of adding raw points for a symptom.</p>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider hidden sm:inline">Optional • Improves Separation</span>
+                </div>
+
+                <div class="mt-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Age Range</label>
+                        <select id="ctx-age" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="infant">Under 2</option>
+                            <option value="child">2 – 12</option>
+                            <option value="teen">13 – 18</option>
+                            <option value="adult">19 – 39</option>
+                            <option value="middle">40 – 59</option>
+                            <option value="senior">60+</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Sex</label>
+                        <select id="ctx-sex" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Symptom Duration</label>
+                        <select id="ctx-duration" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="hours">Hours (acute/sudden)</option>
+                            <option value="days">A few days</option>
+                            <option value="weeks">1 – 4 weeks</option>
+                            <option value="months">Months+ (chronic)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Smoking Status</label>
+                        <select id="ctx-smoking" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="never">Never smoked</option>
+                            <option value="former">Former smoker</option>
+                            <option value="current">Current smoker</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Recent Travel</label>
+                        <select id="ctx-travel" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="none">No recent travel</option>
+                            <option value="domestic">Domestic only</option>
+                            <option value="tropical">International / tropical region</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Tick / Outdoor Exposure</label>
+                        <select id="ctx-tick" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="no">No known exposure</option>
+                            <option value="yes">Recent tick bite / woods, tall grass</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Recent Infection</label>
+                        <select id="ctx-recent-infection" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="none">None recently</option>
+                            <option value="respiratory_gi">URI / sore throat / GI bug in last 2-4 weeks</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-1.5">Relevant Medical History</label>
+                        <select id="ctx-history" onchange="updatePatientContext()" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="unknown" selected>Not specified</option>
+                            <option value="none">None</option>
+                            <option value="diabetes">Diabetes</option>
+                            <option value="immunocompromised">Immunocompromised</option>
+                            <option value="cardiac">Known cardiac disease</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -1024,7 +1121,6 @@
                 description: "IgE-mediated nasal inflammation triggered by allergens. Paroxysmal sneezing, clear rhinorrhea, and pruritus without fever.",
                 action: "Intranasal corticosteroids, oral antihistamines, allergen avoidance."
             },
-            // === NEW DISEASES ADDED BELOW ===
             {
                 name: "Congestive Heart Failure (Acute Exacerbation)",
                 category: "Cardiovascular",
@@ -1079,7 +1175,7 @@
                 category: "Vascular Emergency",
                 prevalence: 0.25,
                 symptoms: {
-                    claudication_calves: 2, localized_muscle_weakness: 1, swelling: 2, severe_joint_pain_swelling: 1
+                    claudication_calves: 2, localized_muscle_weakness: 1, peripheral_edema: 2, severe_joint_pain_swelling: 1
                 },
                 urgency: "high",
                 description: "Clot formation in deep leg veins. Unilateral leg swelling, pain, and warmth.",
@@ -1090,7 +1186,7 @@
                 category: "Pulmonary Infectious",
                 prevalence: 0.15,
                 symptoms: {
-                    drenching_night_sweats: 3, severe_unexplained_weight_loss: 2, chronic_cough: 2,
+                    drenching_night_sweats: 3, severe_unexplained_weight_loss: 2, dry_persistent_cough: 2,
                     hemoptysis: 2, low_grade_fever: 1, night_sweats: 2, malaise: 1
                 },
                 urgency: "high",
@@ -1110,23 +1206,11 @@
                 action: "DMARDs (methotrexate), short-course steroids for flares."
             },
             {
-                name: "Hypoglycemia (Diabetic)",
-                category: "Endocrine Emergency",
-                prevalence: 0.2,
-                symptoms: {
-                    brain_fog_confusion: 2, extreme_fatigue: 1, sweating: 2, tachycardia: 1,
-                    seizures: 1
-                },
-                urgency: "emergency",
-                description: "Low blood glucose causing neuroglycopenic and autonomic symptoms.",
-                action: "Immediate glucose administration (oral or IV dextrose)."
-            },
-            {
                 name: "Bell's Palsy",
                 category: "Neurological",
                 prevalence: 0.25,
                 symptoms: {
-                    unilateral_ptosis_miosis: 2, facial_weakness: 3, numbness_tingling: 1
+                    unilateral_ptosis_miosis: 2, numbness_tingling: 1, localized_muscle_weakness: 1
                 },
                 urgency: "medium",
                 description: "Idiopathic facial nerve (VII) paralysis. Unilateral facial droop.",
@@ -1143,12 +1227,251 @@
                 urgency: "high",
                 description: "Ascending urinary tract infection involving the kidney. Flank pain + systemic symptoms.",
                 action: "IV antibiotics (ceftriaxone) and hospitalization if severe."
+            },
+            {
+                name: "Malaria (Travel-Associated)",
+                category: "Infectious Travel Medicine",
+                prevalence: 0.05,
+                symptoms: {
+                    abrupt_fever_with_rigors: 3, high_fever_chills: 2, generalized_myalgia: 2,
+                    nausea: 1, vomiting: 1, drenching_night_sweats: 2, poor_appetite_anorexia: 1,
+                    erythema_migrans: -3, sandpaper_erythema: -3
+                },
+                urgency: "high",
+                description: "Plasmodium parasite infection transmitted by Anopheles mosquitoes, almost always tied to travel to an endemic region. Classic cyclical spiking fever with violent rigors, sweats, and myalgia.",
+                action: "Confirm with thick/thin blood smear or rapid antigen test urgently; treat per species and regional resistance pattern."
+            },
+            {
+                name: "Dengue Fever (Travel-Associated)",
+                category: "Infectious Travel Medicine",
+                prevalence: 0.04,
+                symptoms: {
+                    high_fever_chills: 2, severe_pulsating_headache: 2, generalized_myalgia: 3,
+                    maculopapular_rash: 2, petechial_purpuric_rash: 1, nausea: 1, vomiting: 1,
+                    erythema_migrans: -3
+                },
+                urgency: "high",
+                description: "Flavivirus transmitted by Aedes mosquitoes in tropical regions. High fever with severe 'breakbone' muscle/joint pain, retro-orbital headache, and a diffuse rash; watch for bleeding/plasma-leak warning signs.",
+                action: "Supportive care with careful fluid management; avoid NSAIDs/aspirin given bleeding risk; monitor platelet count."
+            },
+            {
+                name: "Typhoid Fever (Travel-Associated)",
+                category: "Infectious Travel Medicine",
+                prevalence: 0.03,
+                symptoms: {
+                    low_grade_fever: 1, high_fever_chills: 2, severe_upper_abdominal_pain: 1,
+                    abdominal_cramping_bloating: 1, severe_constipation: 1, persistent_diarrhea: 1,
+                    poor_appetite_anorexia: 1, extreme_fatigue: 1
+                },
+                urgency: "high",
+                description: "Salmonella Typhi infection from contaminated food or water, typically linked to travel in endemic regions. Stepwise rising fever with abdominal discomfort and altered bowel habits.",
+                action: "Confirm with blood or stool culture; treat with an appropriate antibiotic course (e.g. ceftriaxone or azithromycin per resistance pattern)."
+            },
+            {
+                name: "COPD Exacerbation",
+                category: "Pulmonary Chronic",
+                prevalence: 0.3,
+                symptoms: {
+                    wheezing: 2, dyspnea: 3, wet_productive_cough: 2, dry_persistent_cough: 1,
+                    tachycardia: 1, extreme_fatigue: 1,
+                    high_fever_chills: -1
+                },
+                urgency: "high",
+                description: "Acute worsening of chronic obstructive pulmonary disease, overwhelmingly seen in current or former smokers. Increased dyspnea, sputum volume/purulence, and wheeze over baseline.",
+                action: "Bronchodilators, short-course systemic steroids, antibiotics if purulent sputum; supplemental oxygen titrated carefully."
+            },
+            {
+                name: "Costochondritis",
+                category: "Musculoskeletal",
+                prevalence: 0.4,
+                symptoms: {
+                    chest_pain_compression: 2, pleuritic_chest_pain: 1,
+                    substernal_crushing_pain: -3, tearing_interscapular_pain: -3, dyspnea: -2
+                },
+                urgency: "low",
+                description: "Inflammation of the costal cartilage causing reproducible, sharp chest-wall pain that is worse with palpation or movement, without cardiac or pulmonary red flags.",
+                action: "NSAIDs, rest, and reassurance once dangerous cardiopulmonary causes are excluded."
+            },
+            {
+                name: "Panic Attack / Anxiety-Related Chest Pain",
+                category: "Psychosomatic / Autonomic",
+                prevalence: 0.35,
+                symptoms: {
+                    chest_pain_compression: 1, tachycardia: 2, dyspnea: 1, numbness_tingling: 1,
+                    vertigo_dizziness: 1, brain_fog_confusion: 1,
+                    high_fever_chills: -3, substernal_crushing_pain: -2
+                },
+                urgency: "medium",
+                description: "Sudden surge of intense fear or discomfort with palpitations, chest tightness, shortness of breath, and paresthesias, peaking within minutes and without objective cardiac findings.",
+                action: "Reassure, coach slow breathing, consider short-term anxiolytic if severe; rule out cardiac/pulmonary causes first if any doubt."
+            },
+            {
+                name: "GERD (Gastroesophageal Reflux)",
+                category: "Gastrointestinal",
+                prevalence: 0.6,
+                symptoms: {
+                    acid_reflux_heartburn: 3, chest_pain_compression: 1, dysphagia: 1,
+                    dry_persistent_cough: 1, hoarseness_aphonia: 1,
+                    fever: -3, high_fever_chills: -3
+                },
+                urgency: "low",
+                description: "Retrograde flow of stomach acid into the esophagus. Burning retrosternal discomfort often worse lying down or after meals, sometimes with a chronic cough or hoarseness.",
+                action: "Trial of proton pump inhibitor, elevate head of bed, avoid late meals/trigger foods."
+            },
+            {
+                name: "Peptic Ulcer Disease",
+                category: "Gastrointestinal",
+                prevalence: 0.25,
+                symptoms: {
+                    severe_upper_abdominal_pain: 2, hematemesis_coffee_ground: 2, melena_tarry_stools: 2,
+                    nausea: 1, poor_appetite_anorexia: 1,
+                    rlq_mcburneys_point: -3
+                },
+                urgency: "high",
+                description: "Mucosal erosion of the stomach or duodenum, often related to H. pylori or NSAID use. Gnawing epigastric pain, sometimes with bleeding evidenced by dark stools or coffee-ground emesis.",
+                action: "Test for H. pylori, start a proton pump inhibitor, and evaluate urgently if any bleeding signs are present."
+            },
+            {
+                name: "Reactive Arthritis",
+                category: "Rheumatological Post-Infectious",
+                prevalence: 0.05,
+                symptoms: {
+                    severe_joint_pain_swelling: 2, joint_swelling: 2, morning_stiffness_gt_1hr: 1,
+                    low_grade_fever: 1, generalized_skin_rash: 1,
+                    monoarticular_podagra: -2
+                },
+                urgency: "medium",
+                description: "Autoimmune joint inflammation triggered a few weeks after a gastrointestinal or genitourinary infection, typically asymmetric and affecting the lower limbs.",
+                action: "NSAIDs for symptom control; treat any residual underlying infection; refer to rheumatology if persistent."
+            },
+            {
+                name: "Post-Streptococcal Glomerulonephritis",
+                category: "Renal Post-Infectious",
+                prevalence: 0.03,
+                symptoms: {
+                    hematuria: 2, painless_gross_hematuria: 1, peripheral_edema: 2, flank_back_pain: 1,
+                    low_grade_fever: 1,
+                    dysuria: -2
+                },
+                urgency: "high",
+                description: "Immune-complex kidney inflammation appearing one to three weeks after a streptococcal throat or skin infection. Tea-colored urine, puffiness, and mild hypertension are typical.",
+                action: "Monitor blood pressure, renal function, and urine output closely; supportive care in most cases."
+            },
+            {
+                name: "Multiple Sclerosis (Relapse)",
+                category: "Neurological Autoimmune",
+                prevalence: 0.04,
+                symptoms: {
+                    numbness_tingling: 2, blurred_double_vision: 2, loss_of_balance_ataxia: 2,
+                    localized_muscle_weakness: 1, monocular_vision_loss: 1,
+                    thunderclap_headache: -3
+                },
+                urgency: "medium",
+                description: "Autoimmune demyelination of the central nervous system producing episodic, often relapsing-remitting neurological deficits like optic pain with vision loss, numbness, or imbalance.",
+                action: "Urgent neurology referral, MRI with contrast, and consideration of high-dose steroids for an acute relapse."
+            },
+            {
+                name: "Fibromyalgia",
+                category: "Chronic Pain Syndrome",
+                prevalence: 0.2,
+                symptoms: {
+                    generalized_myalgia: 2, extreme_fatigue: 2, chronic_insomnia: 2, brain_fog_confusion: 1,
+                    morning_stiffness_gt_1hr: 1,
+                    high_fever_chills: -3, joint_swelling: -2
+                },
+                urgency: "low",
+                description: "Chronic centralized pain-processing disorder with widespread musculoskeletal pain, unrefreshing sleep, fatigue, and cognitive fog, typically present for months without objective inflammation.",
+                action: "Multimodal approach: graded exercise, sleep hygiene, and consideration of duloxetine, pregabalin, or low-dose amitriptyline."
+            },
+            {
+                name: "Iron Deficiency Anemia",
+                category: "Hematological",
+                prevalence: 0.3,
+                symptoms: {
+                    extreme_fatigue: 2, tachycardia: 1, dyspnea: 1, brain_fog_confusion: 1,
+                    cold_hands_feet: 1,
+                    high_fever_chills: -3
+                },
+                urgency: "medium",
+                description: "Insufficient iron stores impairing hemoglobin production. Progressive fatigue, exertional breathlessness, and pallor developing gradually over weeks to months.",
+                action: "Check CBC and ferritin, investigate the underlying source of blood loss, and start oral or IV iron replacement."
             }
         ];
 
         const selectedSymptoms = new Set();
         let penaltyCoefficient = 2.5; 
         let sigmoidContrast = 6.0; 
+
+        // Non-symptom patient context — re-weights (not raw-adds) the differential
+        const patientContext = {
+            age: "unknown",
+            sex: "unknown",
+            duration: "unknown",
+            smoking: "unknown",
+            travel: "unknown",
+            tick: "unknown",
+            recentInfection: "unknown",
+            history: "unknown"
+        };
+
+        // Maps a disease name to a set of context conditions and the score bonus/penalty (in points)
+        // applied on top of the sigmoidal symptom-match score. Kept modest and directional
+        // (a risk-factor makes a condition more/less worth considering — it never replaces symptoms).
+        const CONTEXT_MODIFIERS = {
+            "Lyme Disease (Early Localized)": [{ if: c => c.tick === "yes", points: 22 }, { if: c => c.tick === "no", points: -15 }],
+            "Malaria (Travel-Associated)": [{ if: c => c.travel === "tropical", points: 30 }, { if: c => c.travel === "none", points: -25 }],
+            "Dengue Fever (Travel-Associated)": [{ if: c => c.travel === "tropical", points: 28 }, { if: c => c.travel === "none", points: -25 }],
+            "Typhoid Fever (Travel-Associated)": [{ if: c => c.travel === "tropical", points: 22 }, { if: c => c.travel === "none", points: -20 }],
+            "Temporal Arteritis (Giant Cell)": [{ if: c => c.age === "senior", points: 18 }, { if: c => ["infant","child","teen"].includes(c.age), points: -30 }],
+            "Acute Coronary Syndrome (STEMI)": [{ if: c => c.smoking === "current", points: 15 }, { if: c => ["middle","senior"].includes(c.age), points: 10 }, { if: c => c.history === "cardiac", points: 15 }],
+            "Aortic Dissection": [{ if: c => c.history === "cardiac", points: 10 }, { if: c => ["middle","senior"].includes(c.age), points: 8 }],
+            "Pulmonary Embolism": [{ if: c => c.smoking === "current", points: 10 }],
+            "COPD Exacerbation": [{ if: c => c.smoking === "current", points: 25 }, { if: c => c.smoking === "former", points: 12 }, { if: c => c.smoking === "never", points: -15 }],
+            "Croup (Laryngotracheobronchitis)": [{ if: c => ["infant","child"].includes(c.age), points: 18 }, { if: c => ["middle","senior"].includes(c.age), points: -20 }],
+            "Acute Epiglottitis": [{ if: c => ["infant","child"].includes(c.age), points: 8 }],
+            "Mumps": [{ if: c => ["infant","child","teen"].includes(c.age), points: 12 }],
+            "Pertussis (Whooping Cough)": [{ if: c => ["infant","child"].includes(c.age), points: 12 }],
+            "Guillain-Barré Syndrome": [{ if: c => c.recentInfection === "respiratory_gi", points: 22 }],
+            "Reactive Arthritis": [{ if: c => c.recentInfection === "respiratory_gi", points: 25 }],
+            "Post-Streptococcal Glomerulonephritis": [{ if: c => c.recentInfection === "respiratory_gi", points: 22 }],
+            "Systemic Lupus Erythematosus (SLE)": [{ if: c => c.sex === "female", points: 10 }],
+            "Gouty Arthritis (Acute)": [{ if: c => c.sex === "male", points: 10 }],
+            "Diabetes Mellitus Type 1 (DKA Risk)": [{ if: c => c.history === "diabetes", points: 15 }, { if: c => ["infant","child","teen"].includes(c.age), points: 8 }],
+            "Pyelonephritis": [{ if: c => c.history === "diabetes", points: 8 }, { if: c => c.sex === "female", points: 6 }],
+            "Community-Acquired Pneumonia": [{ if: c => c.history === "immunocompromised", points: 15 }, { if: c => c.smoking === "current", points: 10 }, { if: c => ["infant","child","senior"].includes(c.age), points: 8 }],
+            "Tuberculosis (Pulmonary)": [{ if: c => c.history === "immunocompromised", points: 15 }, { if: c => c.travel === "tropical", points: 12 }, { if: c => c.duration === "months", points: 15 }],
+            "Acute Bronchitis": [{ if: c => c.duration === "days", points: 8 }],
+            "Migraine with Aura": [{ if: c => c.sex === "female", points: 6 }],
+            "Costochondritis": [{ if: c => ["adult","teen"].includes(c.age), points: 6 }],
+            "Panic Attack / Anxiety-Related Chest Pain": [{ if: c => c.duration === "hours", points: 8 }],
+            "Fibromyalgia": [{ if: c => c.duration === "months", points: 20 }, { if: c => c.sex === "female", points: 8 }],
+            "Rheumatoid Arthritis (Flare)": [{ if: c => c.sex === "female", points: 8 }, { if: c => c.duration === "months", points: 10 }],
+            "Multiple Sclerosis": [{ if: c => c.sex === "female", points: 6 }, { if: c => c.age === "adult", points: 6 }],
+            "Iron Deficiency Anemia": [{ if: c => c.sex === "female", points: 8 }, { if: c => c.duration === "months", points: 10 }],
+            "GERD (Gastroesophageal Reflux)": [{ if: c => c.duration === "months", points: 10 }]
+        };
+
+        function updatePatientContext() {
+            patientContext.age = document.getElementById("ctx-age").value;
+            patientContext.sex = document.getElementById("ctx-sex").value;
+            patientContext.duration = document.getElementById("ctx-duration").value;
+            patientContext.smoking = document.getElementById("ctx-smoking").value;
+            patientContext.travel = document.getElementById("ctx-travel").value;
+            patientContext.tick = document.getElementById("ctx-tick").value;
+            patientContext.recentInfection = document.getElementById("ctx-recent-infection").value;
+            patientContext.history = document.getElementById("ctx-history").value;
+            recalculateDeductions();
+        }
+
+        function getContextAdjustment(diseaseName) {
+            const rules = CONTEXT_MODIFIERS[diseaseName];
+            if (!rules) return 0;
+            let total = 0;
+            rules.forEach(rule => {
+                if (rule.if(patientContext)) total += rule.points;
+            });
+            return total;
+        }
 
         // Change the noise exclusion multiplier
         function changePenaltyStrength(value) {
@@ -1382,12 +1705,20 @@
                 if (finalLinearScore === 0) blendedScore = 0; 
                 if (activeMatchesCount === 0) blendedScore = 0;
 
+                // Apply non-symptom patient-context re-weighting (only once symptoms already support the condition)
+                let contextAdjustment = 0;
+                if (activeMatchesCount > 0) {
+                    contextAdjustment = getContextAdjustment(disease.name);
+                    blendedScore = Math.max(0, Math.min(100, Math.round(blendedScore + contextAdjustment)));
+                }
+
                 return {
                     ...disease,
                     matchedCount: activeMatchesCount,
                     matchedDetails,
                     noiseCount,
                     contraindicationsCount: activeContraindications,
+                    contextAdjustment,
                     finalScore: blendedScore
                 };
             });
@@ -1452,6 +1783,11 @@
                         </div>
                         <div class="text-right">
                             <span class="text-base sm:text-xl font-black text-slate-900 font-mono">${item.finalScore}%</span>
+                            ${item.contextAdjustment ? `
+                                <span class="block text-[9px] font-bold mt-0.5 ${item.contextAdjustment > 0 ? 'text-emerald-600' : 'text-rose-500'}">
+                                    ${item.contextAdjustment > 0 ? '▲' : '▼'} ${Math.abs(item.contextAdjustment)}% context
+                                </span>
+                            ` : ``}
                         </div>
                     </div>
                     
