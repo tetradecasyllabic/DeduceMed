@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeduceMed Pro - Advanced Differential Sandbox</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .card-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 transition-colors duration-200">
+
+    <div class="bg-gradient-to-r from-indigo-700 via-sky-700 to-indigo-800 text-white font-medium px-4 py-3.5 text-center text-xs sm:text-sm shadow-inner relative z-50 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation text-lg text-amber-300 animate-pulse"></i>
+        <span><strong>EDUCATIONAL MATH SIMULATOR:</strong> This is a logic prototype showing noise-reduction penalties and core/optional matching parameters. Do not use for medical triage.</span>
+    </div>
+
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-40 backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-sky-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md shadow-sky-100">
+                    <i class="fa-solid fa-calculator text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-slate-900 leading-tight">DeduceMed <span class="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">Pro Max</span></h1>
+                    <p class="text-[10px] text-slate-400 font-bold tracking-wider uppercase">80+ Condition Overlap & Exclusion Triage Engine</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-100 p-1 rounded-xl flex gap-1 text-xs font-semibold">
+                    <button onclick="switchWorkspaceTab('workspace')" id="tab-workspace" class="tab-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 active transition-all">
+                        <i class="fa-solid fa-vial mr-1"></i> Sandbox Engine
+                    </button>
+                    <button onclick="switchWorkspaceTab('guide')" id="tab-guide" class="tab-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                        <i class="fa-solid fa-file-code mr-1"></i> GitHub Code Split
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Workspace Tab View -->
+        <div id="view-workspace" class="space-y-8">
+            
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.15),transparent_50%)]"></div>
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-7">
+                        <span class="bg-sky-500/20 text-sky-300 font-semibold text-xs px-3 py-1 rounded-full border border-sky-500/30 uppercase tracking-widest">Mathematical Exclusion Solver</span>
+                        <h2 class="text-2xl sm:text-3xl font-black mt-3 tracking-tight leading-none">Core vs. Optional Probability</h2>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                            How it works: Diseases now split symptoms into <strong>Core (Expected)</strong> and <strong>Optional (Has a Chance)</strong>. If you check an optional symptom, the probability goes up! If you do *not* check it, no penalty occurs. However, checking unrelated symptoms (like "Skin Rash" for Strep Throat) triggers the **Noise Penalty** and drops its probability.
+                        </p>
+                    </div>
+                    
+                    <div class="lg:col-span-5 bg-white/5 border border-white/10 backdrop-blur-sm p-5 rounded-2xl">
+                        <div class="flex items-center justify-between mb-3">
+                            <label for="penalty-range" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-sliders text-sky-400"></i> Noise Penalty Factor
+                            </label>
+                            <span id="penalty-value" class="text-amber-300 font-mono font-bold text-sm bg-amber-500/20 px-2.5 py-0.5 rounded border border-amber-400/30">-15% / mismatch</span>
+                        </div>
+                        <input type="range" id="penalty-range" min="0" max="40" value="15" step="5" oninput="changePenaltyStrength(this.value)" class="w-full accent-sky-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                        <p class="text-[11px] text-slate-400 mt-2.5 leading-normal">
+                            Deducts score when symptoms are chosen that are completely unrelated to a disease's core or occasional profile.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-5 border-t border-white/5 flex flex-wrap gap-2 items-center">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1">Triage Scenarios:</span>
+                    <button onclick="applyProfilePreset('mono_pure')" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-viruses text-sky-400"></i> Classic Mono (No Rash)
+                    </button>
+                    <button onclick="applyProfilePreset('strep_throat')" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-bacteria text-emerald-400"></i> Strep Throat (No Rash)
+                    </button>
+                    <button onclick="applyProfilePreset('scarlet_fever')" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-disease text-amber-400"></i> Scarlet Fever (Strep + Rash)
+                    </button>
+                    <button onclick="applyProfilePreset('heart_attack')" class="bg-white/10 hover:bg-rose-500/20 border border-rose-500/30 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Cardiac Event (ACS)
+                    </button>
+                    <button onclick="clearSymptomEngine()" class="text-slate-400 hover:text-white text-xs font-bold px-3 py-1.5 transition ml-auto flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Board
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Advanced Multi-Category Symptom Grid -->
+                <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-100 gap-3">
+                        <div>
+                            <h3 class="text-lg font-black text-slate-900">Symptom Inventory</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Toggle clinical indicators below to test the exclusion formula</p>
+                        </div>
+                        <span id="active-count-badge" class="bg-slate-100 text-slate-700 font-extrabold text-xs px-3 py-1.5 rounded-xl self-start sm:self-center">
+                            0 selected
+                        </span>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="mt-4 relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="symptom-search" oninput="executeSymptomSearch()" placeholder="Search symptoms (e.g. sore throat, rash, tonsil exudate...)" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition">
+                    </div>
+
+                    <!-- Grouped Symptoms Grid -->
+                    <div id="clues-categories-container" class="mt-6 space-y-6">
+                        <!-- Constructed Dynamically by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Right: calculated diagnostic list -->
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <div class="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm sticky top-24">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                            <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-square-poll-vertical text-sky-600"></i> Calculated Differentials
+                            </h3>
+                            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Likelihood Index</div>
+                        </div>
+
+                        <!-- Emergency Triage Warning Box -->
+                        <div id="critical-exclusion-alert" class="hidden mt-4 p-4 bg-rose-50 border border-rose-100 text-rose-950 rounded-2xl flex gap-3 animate-pulse">
+                            <i class="fa-solid fa-circle-exclamation text-xl text-rose-600 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-extrabold text-xs tracking-wide uppercase text-rose-950">Immediate Triage Action Indicated</h4>
+                                <p class="text-xs text-rose-800 mt-1 leading-relaxed">
+                                    High-impact markers representing an emergency cardiovascular, neurological, or abdominal risk factor are positive. Seek professional clinical support.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Live Differential Calculation List -->
+                        <div class="mt-4 max-h-[500px] overflow-y-auto pr-1">
+                            <!-- Persistent empty state cleanly toggled via JS to prevent node destruction crash -->
+                            <div id="results-empty-state" class="text-center py-20">
+                                <div class="text-slate-300 text-5xl mb-3"><i class="fa-solid fa-heart-pulse"></i></div>
+                                <h4 class="font-bold text-slate-700 text-sm">Select Active Symptoms</h4>
+                                <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 leading-relaxed">
+                                    Check clinical features on the left. The engine will rank the 80+ matching diagnoses, prioritizing core matching structures and processing chance symptoms.
+                                </p>
+                            </div>
+
+                            <div id="live-deductions-list" class="space-y-3">
+                                <!-- Constructed Dynamically by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="view-guide" class="hidden bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 pb-5">
+                <h3 class="text-xl font-extrabold text-slate-900">Separate Files Architecture Blueprint</h3>
+                <p class="text-sm text-slate-500 mt-1">Ready to deploy your 80+ disease sandbox to GitHub Pages? Here is how to segment this workspace into a standard web structure.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- file 1 card -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs font-bold bg-blue-100 text-blue-800 px-3 py-1 rounded-md">index.html</span>
+                            <i class="fa-solid fa-code text-slate-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm">1. Document Markup</h4>
+                        <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
+                            Create `index.html`. Strip the `styles` and `script` elements, link them inside the `<head>` tag, and paste the responsive body frame.
+                        </p>
+                        <pre class="font-mono text-[10px] bg-slate-900 text-slate-300 p-3 rounded-lg mt-3 overflow-x-auto">
+&lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- file 2 card -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-md">styles.css</span>
+                            <i class="fa-solid fa-palette text-slate-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm">2. Styling Sheet</h4>
+                        <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
+                            Create `styles.css`. Paste the customized scrollbars, animations, responsive slider styling, and card transitions from our stylesheet block.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- file 3 card -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/50 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-md">app.js</span>
+                            <i class="fa-solid fa-cube text-slate-400 text-lg"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm">3. Clinical Application Logic</h4>
+                        <p class="text-xs text-slate-500 mt-2 leading-relaxed font-medium">
+                            Create `app.js`. Paste the disease dictionary, category lists, search logic, dynamic slider hooks, and the penalty loop algorithm.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment Box -->
+            <div class="bg-indigo-950 text-white rounded-2xl p-6 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.1),transparent_30%)]"></div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <h4 class="font-extrabold text-base text-white">How to Host This on GitHub Pages</h4>
+                        <p class="text-xs text-indigo-200 mt-1 leading-relaxed max-w-2xl font-medium">
+                            Upload all three files to your GitHub repository. Go to your repo <strong class="text-white">Settings > Pages</strong>, select the branch as main, save, and your application will instantly go live globally.
+                        </p>
+                    </div>
+                    <a href="https://pages.github.com/" target="_blank" class="bg-white hover:bg-slate-100 text-slate-900 px-4 py-2.5 rounded-xl text-xs font-extrabold whitespace-nowrap self-start md:self-center transition shadow-md">
+                        Learn GitHub Pages <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-100 py-12 text-center text-xs text-slate-400 mt-16">
+        <p class="font-bold">DeduceMed Experimental Platform • Diagnostic Differential Simulation</p>
+        <p class="mt-2 max-w-3xl mx-auto px-4 leading-relaxed font-medium">
+            Disclaimer: This simulator evaluates intersection arrays and exclusions for computer engineering educational purposes. It does not replace professional clinical decisions, consultation, or testing.
+        </p>
+    </footer>
+
+    <div id="inspector-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeInspectorModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition p-2 hover:bg-slate-50 rounded-xl">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="inspector-modal-content">
+                <!-- Constructed Dynamically by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // Comprehensive List of 55 Symptoms grouped into clinical categories
+        const SYMPTOM_METADATA = {
+            general: [
+                { id: "fever", name: "High Fever & Chills" },
+                { id: "low_fever", name: "Low-Grade Fever" },
+                { id: "fatigue", name: "Extreme/Severe Fatigue" },
+                { id: "body_aches", name: "Generalized Body & Muscle Aches" },
+                { id: "night_sweats", name: "Drenching Night Sweats" },
+                { id: "extreme_thirst", name: "Polydipsia (Extreme Thirst)" },
+                { id: "weight_loss", name: "Unexplained Rapid Weight Loss" },
+                { id: "weight_gain", name: "Unexpected Rapid Weight Gain" },
+                { id: "cold_sensitivity", name: "Intense Cold Sensitivity" },
+                { id: "heat_sensitivity", name: "Intense Heat Sensitivity" },
+                { id: "swollen_lymph", name: "Swollen/Tender Lymph Nodes" },
+                { id: "loss_appetite", name: "Poor Appetite / Anorexia" }
+            ],
+            respiratory_heent: [
+                { id: "dry_cough", name: "Dry/Persistent Cough" },
+                { id: "productive_cough", name: "Wet/Mucus-producing Cough" },
+                { id: "sneezing", name: "Frequent Uncontrollable Sneezing" },
+                { id: "sore_throat", name: "Severe Sore Throat" },
+                { id: "tonsil_exudate", name: "Red/Swollen Tonsils with White Patches" },
+                { id: "runny_nose", name: "Runny or Stuffy Nose" },
+                { id: "shortness_breath", name: "Dyspnea (Shortness of Breath)" },
+                { id: "loss_smell", name: "Anosmia (Loss of Smell & Taste)" },
+                { id: "wheezing", name: "Wheezing / Expiratory Whistle" },
+                { id: "chest_tightness", name: "Chest Pain / Compression" },
+                { id: "sinus_pressure", name: "Facial / Sinus Cavity Pressure" },
+                { id: "hoarseness", name: "Voice Hoarseness (Dysphonia)" },
+                { id: "ear_pain", name: "Ear Pain (Otalgia)" },
+                { id: "blood_sputum", name: "Blood in Sputum (Hemoptysis)" },
+                { id: "difficulty_swallowing", name: "Difficulty Swallowing (Dysphagia)" }
+            ],
+            neurological: [
+                { id: "mild_headache", name: "Tension/Mild Headache" },
+                { id: "pulsating_headache", name: "Severe/Pulsating Headache" },
+                { id: "dizziness", name: "Vertigo or Extreme Dizziness" },
+                { id: "confusion", name: "Brain Fog / Sudden Confusion" },
+                { id: "light_sensitivity", name: "Photophobia (Light Sensitivity)" },
+                { id: "neck_stiffness", name: "Nuchal Rigidity (Stiff Neck)" },
+                { id: "insomnia", name: "Chronic Insomnia" },
+                { id: "blurred_vision", name: "Blurred / Double Vision" },
+                { id: "tinnitus", name: "Tinnitus (Ringing in Ears)" },
+                { id: "numbness", name: "Localized Numbness / Tingling" },
+                { id: "imbalance", name: "Loss of Balance / Ataxia" },
+                { id: "scalp_tenderness", name: "Slightly Elevated Scalp Tenderness" }
+            ],
+            digestive_urinary: [
+                { id: "nausea", name: "Nausea" },
+                { id: "vomiting", name: "Vomiting / Emesis" },
+                { id: "diarrhea", name: "Persistent Diarrhea" },
+                { id: "general_abdominal", name: "Abdominal Cramping / Bloating" },
+                { id: "severe_abdominal_lr", name: "Severe Lower-Right Abdominal Pain" },
+                { id: "upper_abdominal_pain", name: "Severe Upper Abdominal Pain" },
+                { id: "dry_mouth", name: "Dry Mouth (Xerostomia)" },
+                { id: "bloody_stools", name: "Bloody Stools / Melena" },
+                { id: "constipation", name: "Severe Constipation" },
+                { id: "heartburn", name: "Acid Reflux / Heartburn" },
+                { id: "frequent_urination", name: "Frequent Urination / Polyuria" },
+                { id: "painful_urination", name: "Painful Urination / Dysuria" },
+                { id: "bloody_urine", name: "Dark or Bloody Urine / Hematuria" },
+                { id: "flank_pain", name: "Flank/Lower Back Pain" }
+            ],
+            musculoskeletal_skin: [
+                { id: "skin_rash", name: "Generalized Skin Rash" },
+                { id: "target_lesion", name: "Target-Like/Bullseye Rash" },
+                { id: "joint_stiffness", name: "Morning Joint Stiffness" },
+                { id: "joint_pain_swelling", name: "Severe Joint Pain & Swelling" },
+                { id: "muscle_weakness", name: "Localized Muscle Weakness" },
+                { id: "skin_itching", name: "Intense Skin Itching (Pruritus)" },
+                { id: "jaundice", name: "Yellowing of Skin/Eyes" },
+                { id: "easy_bruising", name: "Easy Bruising or Bleeding" }
+            ],
+            cardiovascular: [
+                { id: "palpitations", name: "Tachycardia / Fluttering Pulse" },
+                { id: "cold_extremities", name: "Cold Hands & Feet" },
+                { id: "swollen_ankles", name: "Peripheral Edema (Swollen Ankles)" },
+                { id: "fainting", name: "Fainting / Syncope" }
+            ]
+        };
+
+        const PATHOLOGIES = [
+            {
+                name: "Common Cold",
+                category: "Infectious Respiratory",
+                coreSymptoms: ["runny_nose", "sneezing", "sore_throat"],
+                optionalSymptoms: ["dry_cough", "mild_headache", "low_fever", "fatigue"],
+                urgency: "low",
+                description: "A minor viral infection targeting your upper respiratory tract.",
+                action: "Maintain hydration, supplement rest, and utilize nasal decongestants."
+            },
+            {
+                name: "Influenza (Flu)",
+                category: "Systemic Viral Infection",
+                coreSymptoms: ["fever", "fatigue", "body_aches", "pulsating_headache"],
+                optionalSymptoms: ["dry_cough", "night_sweats", "loss_appetite", "nausea"],
+                urgency: "medium",
+                description: "An acute respiratory infection caused by influenza strains. Begins abruptly with systemic symptoms.",
+                action: "Isolate to protect others, drink clear fluids, and rest."
+            },
+            {
+                name: "COVID-19 Complex",
+                category: "Infectious Respiratory",
+                coreSymptoms: ["fever", "dry_cough", "loss_smell", "shortness_breath"],
+                optionalSymptoms: ["fatigue", "body_aches", "sore_throat", "nausea", "diarrhea"],
+                urgency: "medium",
+                description: "Systemic respiratory condition triggered by SARS-CoV-2. Presents with high variation.",
+                action: "Monitor pulse oximeter saturation. Self-quarantine and seek advice if dyspnea accelerates."
+            },
+            {
+                name: "Gastroenteritis (Stomach Flu)",
+                category: "Digestive System Infection",
+                coreSymptoms: ["nausea", "vomiting", "diarrhea"],
+                optionalSymptoms: ["general_abdominal", "fatigue", "low_fever", "loss_appetite"],
+                urgency: "medium",
+                description: "Acute inflammation of your digestive lining, typically viral.",
+                action: "Prioritize oral rehydration solutions to replace electrolytes immediately."
+            },
+            {
+                name: "Severe Dehydration",
+                category: "Metabolic / Fluid Loss",
+                coreSymptoms: ["extreme_thirst", "dry_mouth", "dizziness"],
+                optionalSymptoms: ["pulsating_headache", "fatigue", "cold_extremities", "confusion"],
+                urgency: "medium",
+                description: "A critical physiological deficit of fluids, disrupting cellular action.",
+                action: "Drink concentrated electrolyte formulas. Avoid caffeine. Requires clinical IV fluids if severe."
+            },
+            {
+                name: "Allergic Rhinitis (Hay Fever)",
+                category: "Immune Response",
+                coreSymptoms: ["sneezing", "runny_nose"],
+                optionalSymptoms: ["sore_throat", "sinus_pressure", "skin_itching", "dry_cough"],
+                urgency: "low",
+                description: "Environmental immune reaction triggering histamine release in nasal mucosa.",
+                action: "Limit allergen contacts and use non-drowsy antihistamines."
+            },
+            {
+                name: "Migraine with Aura",
+                category: "Central Neurological",
+                coreSymptoms: ["pulsating_headache", "light_sensitivity", "blurred_vision"],
+                optionalSymptoms: ["nausea", "dizziness", "numbness", "vomiting"],
+                urgency: "medium",
+                description: "A complex neurovascular event causing pulsating headache cycles and neurological visual disruptions.",
+                action: "Rest in a dark room and apply cold compresses."
+            },
+            {
+                name: "Streptococcal Pharyngitis (Strep Throat)",
+                category: "Bacterial Throat Infection",
+                coreSymptoms: ["sore_throat", "fever", "swollen_lymph", "tonsil_exudate", "difficulty_swallowing"],
+                optionalSymptoms: ["body_aches", "mild_headache", "loss_appetite"], // Note: NO rash listed here
+                urgency: "medium",
+                description: "Highly contagious bacterial throat infection. Lacks cold symptoms (like runny nose or cough) but features distinct painful swallowing and tonsillar patches. Does not present with a rash.",
+                action: "Requires rapid strep screen to trigger target antibiotic course."
+            },
+            {
+                name: "Scarlet Fever",
+                category: "Bacterial Throat / Systemic",
+                coreSymptoms: ["fever", "sore_throat", "skin_rash", "tonsil_exudate", "difficulty_swallowing"],
+                optionalSymptoms: ["swollen_lymph", "body_aches", "vomiting", "loss_appetite"],
+                urgency: "high",
+                description: "Complication of Strep throat characterized by a distinctive bright red, sandpaper skin rash caused by erythrogenic bacterial toxins.",
+                action: "Prompt medical assessment for targeted antibiotics is required to prevent rheumatic fever."
+            },
+            {
+                name: "Infectious Mononucleosis (Mono)",
+                category: "Systemic Viral Infection",
+                coreSymptoms: ["fever", "fatigue", "sore_throat", "swollen_lymph"],
+                optionalSymptoms: ["body_aches", "loss_appetite", "night_sweats", "mild_headache"], // Note: NO rash listed here to prevent false overlap
+                urgency: "medium",
+                description: "Prolonged viral infection (typically Epstein-Barr Virus) characterized by severe physical exhaustion and pharyngeal inflammation. Does not present with a rash unless inappropriate antibiotics are given.",
+                action: "Requires strict avoidance of contact sports to avoid splenomegaly rupture. rest and hydrate."
+            },
+            {
+                name: "Asthma Exacerbation",
+                category: "Chronic Pulmonary",
+                coreSymptoms: ["shortness_breath", "wheezing", "chest_tightness"],
+                optionalSymptoms: ["dry_cough", "fatigue"],
+                urgency: "high",
+                description: "A sudden inflammatory constriction of bronchial airways.",
+                action: "Utilize prescribed rescue inhalers immediately. Seek ER care if oxygen levels continue to fall."
+            },
+            {
+                name: "Bacterial Lobar Pneumonia",
+                category: "Infectious Pulmonary",
+                coreSymptoms: ["fever", "productive_cough", "shortness_breath", "chest_tightness"],
+                optionalSymptoms: ["fatigue", "night_sweats", "body_aches", "blood_sputum"],
+                urgency: "high",
+                description: "Acute bacterial consolidation of lung tissue, filling alveoli with fluid.",
+                action: "Requires clinical staging, potentially including lung imaging and antibiotics."
+            },
+            {
+                name: "Acute Bronchitis",
+                category: "Pulmonary Inflammation",
+                coreSymptoms: ["dry_cough", "productive_cough"],
+                optionalSymptoms: ["wheezing", "fatigue", "sore_throat", "sinus_pressure", "low_fever"],
+                urgency: "medium",
+                description: "Inflammation of bronchial pathways, generating deep mucus layers.",
+                action: "Employ room humidification, stay hydrated, and rest."
+            },
+            {
+                name: "Urinary Tract Infection (UTI)",
+                category: "Urinary Pathogen",
+                coreSymptoms: ["frequent_urination", "painful_urination"],
+                optionalSymptoms: ["general_abdominal", "low_fever", "bloody_urine"],
+                urgency: "medium",
+                description: "Bacterial invasion of bladder layers. Common in many patient profiles.",
+                action: "Requires clean-catch urinalysis and targeted antibiotic scripts."
+            },
+            {
+                name: "Infectious Food Poisoning",
+                category: "Digestive Toxin Exposure",
+                coreSymptoms: ["nausea", "vomiting", "diarrhea", "general_abdominal"],
+                optionalSymptoms: ["fever", "body_aches", "fatigue", "loss_appetite"],
+                urgency: "medium",
+                description: "Spoiled nutrition intake triggering sudden enteric pathogens or toxin release.",
+                action: "Rest digestion channels, progress gently to mild foods, and drink electrolytes."
+            },
+            {
+                name: "Heat Exhaustion",
+                category: "Thermal Injury",
+                coreSymptoms: ["extreme_thirst", "dizziness", "fatigue", "night_sweats"],
+                optionalSymptoms: ["pulsating_headache", "nausea", "cold_extremities", "confusion"],
+                urgency: "high",
+                description: "Critical hyperthermic depletion of vital salts and hydration.",
+                action: "Transition to a cool, air-conditioned area immediately. Apply cool wet cloths to skin."
+            },
+            {
+                name: "Sleep Deprivation Syndrome",
+                category: "Metabolic Deficit",
+                coreSymptoms: ["fatigue", "insomnia", "confusion"],
+                optionalSymptoms: ["mild_headache", "body_aches", "loss_appetite"],
+                urgency: "low",
+                description: "Severe lack of essential restorative sleep, disrupting executive neural actions.",
+                action: "Enforce healthy circadian environments, minimize artificial screens."
+            },
+            {
+                name: "Anemia (Iron Deficiency)",
+                category: "Hematological",
+                coreSymptoms: ["fatigue", "dizziness", "cold_extremities"],
+                optionalSymptoms: ["shortness_breath", "cold_sensitivity", "mild_headache"],
+                urgency: "medium",
+                description: "Low counts of hemoglobin-carrying red blood cells, reducing cellular oxygen.",
+                action: "Perform a blood panel with a physician. Optimize iron-rich diets."
+            },
+            {
+                name: "Thyrotoxicosis (Hyperthyroidism)",
+                category: "Endocrine Dysregulation",
+                coreSymptoms: ["weight_loss", "palpitations", "heat_sensitivity"],
+                optionalSymptoms: ["night_sweats", "insomnia", "muscle_weakness", "diarrhea"],
+                urgency: "medium",
+                description: "Excessive hormonal release by the thyroid gland, raising metabolic baselines.",
+                action: "Require endocrine blood panels (TSH, Free T4) and consult doctor."
+            },
+            {
+                name: "Hypothyroidism",
+                category: "Endocrine Dysregulation",
+                coreSymptoms: ["fatigue", "weight_gain", "cold_sensitivity"],
+                optionalSymptoms: ["joint_stiffness", "muscle_weakness", "constipation"],
+                urgency: "medium",
+                description: "Deficiency of thyroid metabolic hormone production.",
+                action: "Evaluate hormonal panels under professional guidance for thyroid replacement care."
+            },
+            {
+                name: "Acute Gouty Arthritis",
+                category: "Metabolic Joint Inflammation",
+                coreSymptoms: ["joint_pain_swelling", "joint_stiffness"],
+                optionalSymptoms: ["fever", "body_aches"],
+                urgency: "medium",
+                description: "Painful uric acid crystallization within a localized joint capsule.",
+                action: "Elevate and rest the joint, avoid high-purine foods."
+            },
+            {
+                name: "Acute Bacterial Meningitis",
+                category: "Central Nervous Infection",
+                coreSymptoms: ["fever", "pulsating_headache", "neck_stiffness", "confusion"],
+                optionalSymptoms: ["light_sensitivity", "nausea", "vomiting", "skin_rash"],
+                urgency: "emergency",
+                description: "A highly critical, life-threatening bacterial inflammation of protective brain/spinal coverings.",
+                action: "EMERGENCY: Proceed to the closest emergency room immediately."
+            },
+            {
+                name: "Acute Appendicitis",
+                category: "Digestive Emergency",
+                coreSymptoms: ["severe_abdominal_lr", "nausea", "vomiting"],
+                optionalSymptoms: ["fever", "fatigue", "loss_appetite"],
+                urgency: "emergency",
+                description: "An acute, dangerous inflammatory obstruction of your appendix.",
+                action: "Do not eat or drink anything (to keep stomach ready for potential surgery). Go to an ER immediately."
+            },
+            {
+                name: "Acute Maxillary Sinusitis",
+                category: "Respiratory Cavity Infection",
+                coreSymptoms: ["sinus_pressure", "runny_nose", "mild_headache"],
+                optionalSymptoms: ["sore_throat", "dry_cough", "low_fever"],
+                urgency: "low",
+                description: "Fluid blockage and bacterial propagation in maxillary sinus chambers.",
+                action: "Employ facial warm compresses, steam inhalation, and nasal saline drops."
+            },
+            {
+                name: "Labyrinthitis",
+                category: "Vestibular Neurological",
+                coreSymptoms: ["dizziness", "nausea", "tinnitus"],
+                optionalSymptoms: ["vomiting", "imbalance", "blurred_vision"],
+                urgency: "medium",
+                description: "Inner-ear nerve pathway irritation, disrupting physiological equilibrium.",
+                action: "Avoid active driving or posture changes. Ask an ENT about vestibular therapy."
+            },
+            {
+                name: "Gastroesophageal Reflux (GERD)",
+                category: "Esophageal Dysfunction",
+                coreSymptoms: ["heartburn", "chest_tightness"],
+                optionalSymptoms: ["dry_cough", "nausea", "dry_mouth"],
+                urgency: "low",
+                description: "Frequent retrograde action of corrosive gastric juices burning esophageal tissue.",
+                action: "Avoid lying flat within 3 hours of meals. Consider antacids."
+            },
+            {
+                name: "Fibromyalgia",
+                category: "Systemic Pain Neurological",
+                coreSymptoms: ["body_aches", "fatigue", "joint_stiffness"],
+                optionalSymptoms: ["insomnia", "numbness", "confusion", "mild_headache"],
+                urgency: "medium",
+                description: "Sensory central amplification, escalating neuro-muscular pain mapping.",
+                action: "Utilize light aerobic movement, healthy sleep habits, and pacing."
+            },
+            {
+                name: "Diabetes Mellitus",
+                category: "Metabolic Pathway",
+                coreSymptoms: ["frequent_urination", "extreme_thirst", "fatigue"],
+                optionalSymptoms: ["blurred_vision", "weight_loss", "dry_mouth"],
+                urgency: "high",
+                description: "Vascular insulin dysregulation causing elevated toxic blood glucose loads.",
+                action: "Formally request fasting insulin and HbA1c panels from a laboratory."
+            },
+            {
+                name: "Panic Attack Crisis",
+                category: "Cardio-Neurological Stress",
+                coreSymptoms: ["shortness_breath", "chest_tightness", "palpitations"],
+                optionalSymptoms: ["dizziness", "fainting", "numbness"],
+                urgency: "medium",
+                description: "Sudden autonomous nervous system overload generating intense physical fear.",
+                action: "Employ deep box breathing and identify sensory items around you."
+            },
+            {
+                name: "Lyme Vector Disease",
+                category: "Infectious Tick-borne",
+                coreSymptoms: ["target_lesion", "fever", "joint_pain_swelling"],
+                optionalSymptoms: ["fatigue", "body_aches", "swollen_lymph"],
+                urgency: "medium",
+                description: "Vector-borne spirochete infection from infected ticks, showing target-like skin markers.",
+                action: "Check for early-stage doxycycline antibiotic cycles with an infectious disease specialist."
+            },
+            {
+                name: "Chronic Fatigue Syndrome (ME/CFS)",
+                category: "Neurological/Systemic",
+                coreSymptoms: ["fatigue", "confusion", "insomnia"],
+                optionalSymptoms: ["body_aches", "swollen_lymph", "mild_headache"],
+                urgency: "medium",
+                description: "Unexplained, disabling systemic physical and cognitive crashes following exertion.",
+                action: "Incorporate strict physical energy budgeting (pacing) and avoid push-crash cycles."
+            },
+            {
+                name: "Rheumatoid Arthritis",
+                category: "Autoimmune Joint",
+                coreSymptoms: ["joint_pain_swelling", "joint_stiffness", "fatigue"],
+                optionalSymptoms: ["low_fever", "weight_loss", "body_aches"],
+                urgency: "medium",
+                description: "Chronic systemic autoimmune inflammation targeting the synovium of multiple joints.",
+                action: "Consult a rheumatologist for evaluation of systemic inflammatory markers."
+            },
+            {
+                name: "Peptic Ulcer Disease",
+                category: "Digestive Lesion",
+                coreSymptoms: ["upper_abdominal_pain", "heartburn", "nausea"],
+                optionalSymptoms: ["bloody_stools", "vomiting", "loss_appetite"],
+                urgency: "high",
+                description: "Corrosive lining damage in the stomach or duodenum, presenting with burning upper abdominal pain.",
+                action: "Avoid NSAIDs. Seek clinical staging and testing for H. Pylori."
+            },
+            {
+                name: "Acute Cholecystitis (Gallstones)",
+                category: "Digestive Emergency",
+                coreSymptoms: ["upper_abdominal_pain", "nausea", "fever"],
+                optionalSymptoms: ["vomiting", "jaundice", "loss_appetite"],
+                urgency: "high",
+                description: "Acute inflammation of the gallbladder, typically due to cystic duct obstruction by gallstones.",
+                action: "Consult doctor. Ultrasound mapping of the right upper quadrant is needed."
+            },
+            {
+                name: "Acute Pyelonephritis (Kidney Infection)",
+                category: "Urinary / Renal Infection",
+                coreSymptoms: ["fever", "flank_pain", "painful_urination"],
+                optionalSymptoms: ["frequent_urination", "nausea", "vomiting", "bloody_urine"],
+                urgency: "high",
+                description: "Bacterial infection ascending from the bladder into the kidney pelvis and parenchyma.",
+                action: "Urgent medical check for targeted IV or oral antibiotics is necessary."
+            },
+            {
+                name: "Pulmonary Embolism (PE)",
+                category: "Vascular Emergency",
+                coreSymptoms: ["shortness_breath", "chest_tightness", "palpitations"],
+                optionalSymptoms: ["fainting", "blood_sputum", "dizziness"],
+                urgency: "emergency",
+                description: "Obstruction of pulmonary arterial vessels by a dislodged venous clot.",
+                action: "EMERGENCY: Proceed to the closest emergency room immediately."
+            },
+            {
+                name: "Acute Coronary Syndrome (Heart Attack)",
+                category: "Cardiovascular Emergency",
+                coreSymptoms: ["chest_tightness", "shortness_breath", "palpitations"],
+                optionalSymptoms: ["nausea", "cold_extremities", "fainting", "dizziness"],
+                urgency: "emergency",
+                description: "Myocardial ischemia due to acute thrombotic coronary occlusion.",
+                action: "EMERGENCY: Call 911 immediately. Chew aspirin if directed by paramedics."
+            },
+            {
+                name: "COPD Flare",
+                category: "Chronic Pulmonary",
+                coreSymptoms: ["shortness_breath", "productive_cough", "wheezing"],
+                optionalSymptoms: ["chest_tightness", "fatigue", "night_sweats"],
+                urgency: "high",
+                description: "Acute exacerbation of airflow obstruction in chronic obstructive pulmonary disease.",
+                action: "Utilize nebulized bronchodilators. Seek medical assistance for potential steroid or oxygen therapy."
+            },
+            {
+                name: "Shingles (Herpes Zoster)",
+                category: "Neurological Viral",
+                coreSymptoms: ["skin_rash", "skin_itching"],
+                optionalSymptoms: ["mild_headache", "fatigue", "low_fever"],
+                urgency: "medium",
+                description: "Reactivation of latent varicella-zoster virus in a sensory nerve root.",
+                action: "Consult doctor for antiviral therapy within 72 hours of rash onset."
+            },
+            {
+                name: "Otitis Media (Ear Infection)",
+                category: "HEENT Infection",
+                coreSymptoms: ["ear_pain", "fever"],
+                optionalSymptoms: ["low_fever", "fatigue", "mild_headache"],
+                urgency: "medium",
+                description: "Acute bacterial or viral middle ear effusion and tissue inflammation.",
+                action: "Evaluate with otoscopy. Pain management and possible antibiotic therapy."
+            },
+            {
+                name: "Celiac Disease",
+                category: "Autoimmune Enteropathy",
+                coreSymptoms: ["diarrhea", "general_abdominal", "fatigue"],
+                optionalSymptoms: ["weight_loss", "loss_appetite", "nausea"],
+                urgency: "medium",
+                description: "Autoimmune injury of the small intestine villi triggered by gluten ingestion.",
+                action: "Maintain regular gluten intake prior to formal serology and endoscopic biopsy."
+            },
+            {
+                name: "Crohn's Disease",
+                category: "Inflammatory Bowel Disease",
+                coreSymptoms: ["diarrhea", "general_abdominal", "weight_loss"],
+                optionalSymptoms: ["fever", "fatigue", "loss_appetite", "bloody_stools"],
+                urgency: "high",
+                description: "Transmural chronic inflammatory bowel disease affecting any segment from mouth to anus.",
+                action: "Seek comprehensive specialist gastroenterologist assessment."
+            },
+            {
+                name: "Ulcerative Colitis",
+                category: "Inflammatory Bowel Disease",
+                coreSymptoms: ["diarrhea", "bloody_stools", "general_abdominal"],
+                optionalSymptoms: ["weight_loss", "fatigue", "low_fever"],
+                urgency: "high",
+                description: "Mucosal inflammation restricted to the colon and rectum, featuring bloody bowel movements.",
+                action: "Requires diagnostic colonoscopy and targeted anti-inflammatory regimens."
+            },
+            {
+                name: "Irritable Bowel Syndrome (IBS)",
+                category: "Functional Bowel",
+                coreSymptoms: ["general_abdominal"],
+                optionalSymptoms: ["diarrhea", "constipation", "nausea"],
+                urgency: "low",
+                description: "Common functional GI disorder characterized by visceral hypersensitivity and motility deficits.",
+                action: "Utilize dietary modifications, fiber support, and stress reduction strategies."
+            },
+            {
+                name: "Acute Pancreatitis",
+                category: "Digestive Emergency",
+                coreSymptoms: ["upper_abdominal_pain", "nausea", "vomiting"],
+                optionalSymptoms: ["fever", "palpitations", "dry_mouth"],
+                urgency: "emergency",
+                description: "Autodigestive inflammatory injury of pancreatic parenchyma, causing severe epigastric distress.",
+                action: "Requires immediate hospital admission, IV fluid resuscitation, and bowel rest."
+            },
+            {
+                name: "Temporal Arteritis",
+                category: "Vascular Autoimmune",
+                coreSymptoms: ["scalp_tenderness", "pulsating_headache", "blurred_vision"],
+                optionalSymptoms: ["low_fever", "fatigue", "body_aches"],
+                urgency: "emergency",
+                description: "Large-vessel vasculitis targeting carotid branches; untreated, leads to irreversible blindness.",
+                action: "EMERGENCY: Immediate high-dose systemic corticosteroid therapy is indicated if suspected."
+            },
+            {
+                name: "Parkinson's Disease",
+                category: "Neurodegenerative",
+                coreSymptoms: ["muscle_weakness", "imbalance"],
+                optionalSymptoms: ["fatigue", "insomnia", "confusion"],
+                urgency: "medium",
+                description: "Loss of dopamine-producing cells in the substantia nigra causing motor planning deficits.",
+                action: "Seek comprehensive neurological consultation for assessment."
+            },
+            {
+                name: "Multiple Sclerosis (MS) Flare",
+                category: "Neuro-Autoimmune",
+                coreSymptoms: ["numbness", "blurred_vision", "muscle_weakness"],
+                optionalSymptoms: ["fatigue", "imbalance", "dizziness"],
+                urgency: "high",
+                description: "Demyelinating lesions within the central nervous system, affecting sensory and motor pathways.",
+                action: "Requires neurological assessment and MRI. Often managed with acute IV steroids."
+            },
+            {
+                name: "Tension-Type Headache",
+                category: "Neurological Headache",
+                coreSymptoms: ["mild_headache"],
+                optionalSymptoms: ["fatigue", "insomnia", "body_aches"],
+                urgency: "low",
+                description: "Sustained muscle contraction of the pericranial muscles, causing band-like tension.",
+                action: "Employ stress management, correct posture, and limit OTC analgesics to avoid rebounds."
+            },
+            {
+                name: "Meniere's Disease",
+                category: "Inner Ear Dysfunction",
+                coreSymptoms: ["dizziness", "tinnitus", "imbalance"],
+                optionalSymptoms: ["ear_pain", "nausea", "blurred_vision"],
+                urgency: "medium",
+                description: "Endolymphatic hydrops causing episodic vertigo, low-frequency hearing loss, and ringing.",
+                action: "Consult ENT. Implement a low-sodium diet and avoid triggers."
+            },
+            {
+                name: "Chronic Kidney Disease",
+                category: "Renal Failure",
+                coreSymptoms: ["fatigue", "swollen_ankles"],
+                optionalSymptoms: ["frequent_urination", "nausea", "cold_extremities"],
+                urgency: "high",
+                description: "Long-term decay of glomerular filtration, causing metabolic accumulation.",
+                action: "Arrange metabolic panels (eGFR, BUN) and monitor arterial pressure."
+            },
+            {
+                name: "Congestive Heart Failure (CHF)",
+                category: "Cardiovascular Failure",
+                coreSymptoms: ["shortness_breath", "swollen_ankles", "fatigue"],
+                optionalSymptoms: ["productive_cough", "palpitations", "weight_gain"],
+                urgency: "high",
+                description: "Inability of cardiac output to meet systemic demand, leading to pulmonary and peripheral congestion.",
+                action: "Restrict sodium and fluids. Monitor daily weights. Seek urgent cardiology care if dyspnea worsens."
+            },
+            {
+                name: "Deep Vein Thrombosis (DVT)",
+                category: "Vascular Occlusion",
+                coreSymptoms: ["swollen_ankles", "body_aches"],
+                optionalSymptoms: ["cold_extremities", "muscle_weakness"],
+                urgency: "high",
+                description: "Venous thrombosis in deep leg vessels, posing a thromboembolic risk.",
+                action: "Requires duplex ultrasound scan and acute anticoagulant therapy."
+            },
+            {
+                name: "Peripheral Artery Disease (PAD)",
+                category: "Peripheral Vascular",
+                coreSymptoms: ["cold_extremities", "muscle_weakness"],
+                optionalSymptoms: ["numbness", "body_aches"],
+                urgency: "medium",
+                description: "Atherosclerotic narrowing of lower extremity arteries, causing ischemic calf pain.",
+                action: "Optimize lipid profiles, evaluate ankle-brachial index, and cease tobacco."
+            },
+            {
+                name: "Tuberculosis (TB)",
+                category: "Bacterial Pulmonary",
+                coreSymptoms: ["productive_cough", "blood_sputum", "fever"],
+                optionalSymptoms: ["night_sweats", "weight_loss", "fatigue", "body_aches"],
+                urgency: "high",
+                description: "Chronic necrotizing bacterial pulmonary infection via Mycobacterium tuberculosis.",
+                action: "Isolate, employ respiratory precautions, and coordinate multi-drug therapy."
+            },
+            {
+                name: "Acute Sinusitis",
+                category: "HEENT Mucosal",
+                coreSymptoms: ["sinus_pressure", "runny_nose"],
+                optionalSymptoms: ["mild_headache", "low_fever", "sore_throat"],
+                urgency: "low",
+                description: "Secondary bacterial or viral congestion of craniofacial osteomeatal pathways.",
+                action: "Utilize nasal saline irrigations and intranasal budesonide."
+            },
+            {
+                name: "Viral Pharyngitis",
+                category: "HEENT Infection",
+                coreSymptoms: ["sore_throat", "low_fever"],
+                optionalSymptoms: ["runny_nose", "sneezing", "dry_cough"],
+                urgency: "low",
+                description: "Superficial pharyngeal viral congestion (rhinovirus, adenovirus) without bacterial patterns.",
+                action: "Employ warm saline rinses and supportive measures."
+            },
+            {
+                name: "Laryngitis",
+                category: "HEENT Vocal",
+                coreSymptoms: ["hoarseness"],
+                optionalSymptoms: ["sore_throat", "dry_cough", "difficulty_swallowing"],
+                urgency: "low",
+                description: "Viral swelling of the laryngeal folds, causing vocal pitch drop.",
+                action: "Implement complete voice rest and stay hydrated."
+            },
+            {
+                name: "Gastrointestinal Hemorrhage",
+                category: "Vascular Digestive",
+                coreSymptoms: ["bloody_stools", "fainting"],
+                optionalSymptoms: ["fatigue", "cold_extremities", "nausea"],
+                urgency: "emergency",
+                description: "Severe vascular leakage within digestive pathways (esophageal, gastric, or lower intestinal source).",
+                action: "EMERGENCY: Go immediately to the ER for stabilization and diagnostic endoscopy."
+            },
+            {
+                name: "Hypoglycemia (Low Blood Sugar)",
+                category: "Metabolic Emergency",
+                coreSymptoms: ["palpitations", "confusion", "cold_extremities"],
+                optionalSymptoms: ["dizziness", "fatigue", "nausea"],
+                urgency: "high",
+                description: "Critical drop in serum glucose, depriving cerebral tissue of fuel.",
+                action: "Ingest 15g of fast-acting glucose immediately and verify values after 15 minutes."
+            },
+            {
+                name: "Nephrolithiasis (Kidney Stones)",
+                category: "Renal / Urinary Spasm",
+                coreSymptoms: ["flank_pain", "bloody_urine", "painful_urination"],
+                optionalSymptoms: ["nausea", "vomiting", "frequent_urination"],
+                urgency: "high",
+                description: "Crystalline precipitates forming within renal calyces, causing ureteral spasms.",
+                action: "Maintain hydration, screen urine, and pursue diagnostic non-contrast spiral CT scan."
+            },
+            {
+                name: "BPPV (Positional Vertigo)",
+                category: "HEENT Vestibular",
+                coreSymptoms: ["dizziness", "imbalance"],
+                optionalSymptoms: ["nausea", "vomiting"],
+                urgency: "low",
+                description: "Dislodged calcium carbonate otoconia migrating into posterior semicircular canals.",
+                action: "Perform the Epley canalith repositioning maneuver."
+            },
+            {
+                name: "Generalized Anxiety Disorder (GAD)",
+                category: "Psychiatric State",
+                coreSymptoms: ["palpitations", "insomnia"],
+                optionalSymptoms: ["fatigue", "mild_headache", "shortness_breath"],
+                urgency: "low",
+                description: "Sustained neuro-arousal, causing excessive cognitive worry and somatic changes.",
+                action: "Incorporate cognitive behavioral therapy, daily mindfulness, and consult your doctor."
+            },
+            {
+                name: "Major Depressive Disorder",
+                category: "Psychiatric State",
+                coreSymptoms: ["fatigue", "insomnia"],
+                optionalSymptoms: ["weight_loss", "weight_gain", "loss_appetite", "body_aches"],
+                urgency: "low",
+                description: "Complex affective deficit disrupting sleep, metabolic baselines, and dopamine loops.",
+                action: "Seek professional clinical therapy and medication review."
+            },
+            {
+                name: "Atrial Fibrillation (A-Fib)",
+                category: "Cardiovascular Arrhythmia",
+                coreSymptoms: ["palpitations", "dizziness"],
+                optionalSymptoms: ["fatigue", "shortness_breath", "fainting"],
+                urgency: "high",
+                description: "Disorganized supraventricular electrical signals, risking systemic thrombolytic events.",
+                action: "Request a standard 12-lead ECG and consult cardiology for stroke risk (CHA2DS2-VASc) scoring."
+            },
+            {
+                name: "Systemic Lupus Erythematosus (SLE)",
+                category: "Systemic Autoimmune",
+                coreSymptoms: ["skin_rash", "joint_pain_swelling", "fatigue"],
+                optionalSymptoms: ["low_fever", "night_sweats", "weight_loss", "hair_loss"],
+                urgency: "high",
+                description: "Multi-system autoimmune process generating autoantibody complexes against tissue.",
+                action: "Evaluate systemic markers, including ANA and dsDNA titers."
+            },
+            {
+                name: "Hypovolemic Shock",
+                category: "Systemic Shock",
+                coreSymptoms: ["fainting", "cold_extremities", "palpitations"],
+                optionalSymptoms: ["confusion", "extreme_thirst", "nausea"],
+                urgency: "emergency",
+                description: "Critical fluid or blood volume loss, leading to severe hemodynamic failure.",
+                action: "EMERGENCY: Immediate clinical IV volume resuscitation and source occlusion are required."
+            },
+            {
+                name: "Sepsis Syndrome",
+                category: "Infectious Emergency",
+                coreSymptoms: ["fever", "palpitations", "confusion"],
+                optionalSymptoms: ["shortness_breath", "extreme_thirst", "cold_extremities"],
+                urgency: "emergency",
+                description: "Life-threatening dysregulated host immune response to deep infection.",
+                action: "EMERGENCY: Seek immediate hospital care for empirical IV antibiotics, blood cultures, and lactic acid tracking."
+            },
+            {
+                name: "Pelvic Inflammatory Disease (PID)",
+                category: "Infectious Pelvic",
+                coreSymptoms: ["general_abdominal", "fever"],
+                optionalSymptoms: ["painful_urination", "nausea", "fatigue"],
+                urgency: "high",
+                description: "Ascending cervical microbial invasion targeting the uterus and fallopian tubes.",
+                action: "Requires swift clinical gynecological evaluation and dual-coverage antibiotic therapy."
+            },
+            {
+                name: "Infectious Arthritis (Septic Joint)",
+                category: "Infectious Joint",
+                coreSymptoms: ["joint_pain_swelling", "fever"],
+                optionalSymptoms: ["joint_stiffness", "body_aches", "fatigue"],
+                urgency: "high",
+                description: "Bacterial colonization inside a joint cavity, risking rapid articular surface decay.",
+                action: "Requires urgent synovial fluid aspiration, culture, and immediate targeted IV therapy."
+            },
+            {
+                name: "Raynaud's Phenomenon",
+                category: "Vascular Spasm",
+                coreSymptoms: ["cold_extremities", "numbness"],
+                optionalSymptoms: ["pain", "cold_sensitivity"],
+                urgency: "low",
+                description: "Vasospastic vascular events in response to cold temperatures or emotional stress.",
+                action: "Avoid rapid temperature drops. Wear protective insulation on hands and feet."
+            },
+            {
+                name: "Rosacea",
+                category: "Skin Inflammation",
+                coreSymptoms: ["skin_rash"],
+                optionalSymptoms: ["skin_itching", "dry_mouth"],
+                urgency: "low",
+                description: "Chronic facial capillary inflammation and flushing skin reactions.",
+                action: "Avoid thermal, spicy, and alcohol triggers. Use protective physical mineral sunscreen."
+            },
+            {
+                name: "Contact Dermatitis",
+                category: "Skin Immune",
+                coreSymptoms: ["skin_rash", "skin_itching"],
+                optionalSymptoms: ["dry_skin", "blisters"],
+                urgency: "low",
+                description: "Local cell-mediated delayed-type hypersensitivity skin reaction to exogenous allergens.",
+                action: "Identify allergen contacts and use mild topical corticosteroids if directed."
+            },
+            {
+                name: "Psoriatic Disease",
+                category: "Autoimmune Skin/Joint",
+                coreSymptoms: ["skin_rash", "joint_pain_swelling"],
+                optionalSymptoms: ["skin_itching", "joint_stiffness", "fatigue"],
+                urgency: "medium",
+                description: "Systemic hyper-proliferation of dermal layers, combined with seronegative joint inflammation.",
+                action: "Seek coordinated assessment from both dermatology and rheumatology specialists."
+            },
+            {
+                name: "Graves' Disease",
+                category: "Thyroid Autoimmune",
+                coreSymptoms: ["weight_loss", "palpitations"],
+                optionalSymptoms: ["heat_sensitivity", "insomnia", "muscle_weakness"],
+                urgency: "medium",
+                description: "TSH-receptor autoantibodies hyper-stimulating thyroid hormone output.",
+                action: "Obtain anti-TSHR titers and consult doctor regarding antithyroid drug therapy."
+            },
+            {
+                name: "Hashimoto's Thyroiditis",
+                category: "Thyroid Autoimmune",
+                coreSymptoms: ["fatigue", "weight_gain"],
+                optionalSymptoms: ["cold_sensitivity", "joint_stiffness", "muscle_weakness"],
+                urgency: "medium",
+                description: "Autoimmune follicular destruction causing long-term hormone deficiency.",
+                action: "Monitor serum TSH levels and discuss thyroid replacement therapy with your doctor."
+            },
+            {
+                name: "Pertussis (Whooping Cough)",
+                category: "Bacterial Pulmonary",
+                coreSymptoms: ["productive_cough", "vomiting"],
+                optionalSymptoms: ["low_fever", "fatigue", "runny_nose"],
+                urgency: "high",
+                description: "Severe bacterial respiratory infection marked by paroxysmal cough cycles.",
+                action: "Lessen contact with infants. Seek PCR sputum screening and targeted macrolide therapy."
+            },
+            {
+                name: "Encephalitis",
+                category: "Central Nervous Infection",
+                coreSymptoms: ["fever", "pulsating_headache", "confusion"],
+                optionalSymptoms: ["imbalance", "light_sensitivity", "vomiting", "numbness"],
+                urgency: "emergency",
+                description: "Acute viral or autoimmune parenchymal brain inflammation.",
+                action: "EMERGENCY: Immediate lumbar puncture, MRI, and supportive IV antiviral therapy are indicated."
+            },
+            {
+                name: "Leptospirosis",
+                category: "Bacterial Zoonotic",
+                coreSymptoms: ["fever", "body_aches", "jaundice"],
+                optionalSymptoms: ["pulsating_headache", "nausea", "vomiting", "skin_rash"],
+                urgency: "high",
+                description: "Zoonotic spirochete bacterial infection contracted through exposure to animal urine.",
+                action: "Requires serological confirmation and early systemic penicillin or doxycycline treatment."
+            },
+            {
+                name: "West Nile Virus",
+                category: "Systemic Vector-borne",
+                coreSymptoms: ["fever", "body_aches", "fatigue"],
+                optionalSymptoms: ["skin_rash", "swollen_lymph", "mild_headache"],
+                urgency: "medium",
+                description: "Arbovirus infection transmitted via vector mosquito bites, yielding fever and mild truncal rash.",
+                action: "Incorporate supportive care, rest, hydration, and protect yourself against future mosquito bites."
+            }
+        ];
+
+        const selectedSymptoms = new Set();
+        let penaltyCoefficient = 15; // Percent deduction per mismatching symptom
+
+        // Changing the noise penalty range
+        function changePenaltyStrength(value) {
+            penaltyCoefficient = parseInt(value);
+            document.getElementById("penalty-value").textContent = `-${penaltyCoefficient}% / mismatch`;
+            recalculateDeductions();
+        }
+
+        function renderSymptomChecklist() {
+            const container = document.getElementById("clues-categories-container");
+            container.innerHTML = "";
+
+            Object.entries(SYMPTOM_METADATA).forEach(([categoryKey, list]) => {
+                const readableCategory = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1).replace('_', ' & ').toUpperCase();
+                
+                const block = document.createElement("div");
+                block.className = "space-y-3";
+
+                let iconMarkup = "fa-solid fa-folder";
+                if (categoryKey === "general") iconMarkup = "fa-solid fa-heart-pulse text-rose-500";
+                if (categoryKey === "respiratory_heent") iconMarkup = "fa-solid fa-lungs text-sky-500";
+                if (categoryKey === "neurological") iconMarkup = "fa-solid fa-brain text-purple-500";
+                if (categoryKey === "digestive_urinary") iconMarkup = "fa-solid fa-droplet text-amber-600";
+                if (categoryKey === "musculoskeletal_skin") iconMarkup = "fa-solid fa-hand-holding-medical text-emerald-500";
+                if (categoryKey === "cardiovascular") iconMarkup = "fa-solid fa-wave-square text-indigo-500";
+
+                block.innerHTML = `
+                    <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 pt-2">
+                        <i class="${iconMarkup}"></i> ${readableCategory}
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+                `;
+
+                const grid = block.querySelector("div");
+
+                list.forEach(item => {
+                    const active = selectedSymptoms.has(item.id);
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.id = `sym-${item.id}`;
+                    btn.onclick = () => toggleSymptomClue(item.id);
+                    btn.className = `p-3 text-left rounded-xl text-xs font-semibold flex items-center justify-between border transition-all ${
+                        active 
+                        ? "bg-indigo-50 border-indigo-300 text-indigo-900 shadow-sm shadow-indigo-100" 
+                        : "bg-white hover:bg-slate-50 border-slate-200 text-slate-700"
+                    }`;
+                    btn.setAttribute("data-symptom-name", item.name.toLowerCase());
+
+                    btn.innerHTML = `
+                        <span>${item.name}</span>
+                        <span class="w-4.5 h-4.5 rounded flex items-center justify-center border text-[10px] ${
+                            active ? "bg-indigo-600 border-indigo-600 text-white" : "border-slate-300 bg-slate-50 text-transparent"
+                        }">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    `;
+                    grid.appendChild(btn);
+                });
+
+                container.appendChild(block);
+            });
+        }
+
+        function toggleSymptomClue(id) {
+            if (selectedSymptoms.has(id)) {
+                selectedSymptoms.delete(id);
+            } else {
+                selectedSymptoms.add(id);
+            }
+            recalculateDeductions();
+        }
+
+        // Filtering symptoms via search input
+        function executeSymptomSearch() {
+            const val = document.getElementById("symptom-search").value.toLowerCase().trim();
+            const btns = document.querySelectorAll("[id^='sym-']");
+
+            btns.forEach(btn => {
+                const nameAttr = btn.getAttribute("data-symptom-name");
+                if (nameAttr.includes(val)) {
+                    btn.style.display = "flex";
+                } else {
+                    btn.style.display = "none";
+                }
+            });
+
+            const parentBlocks = document.querySelectorAll("#clues-categories-container > div");
+            parentBlocks.forEach(block => {
+                const visible = block.querySelectorAll("button[style='display: flex;'], button:not([style])");
+                if (visible.length === 0) {
+                    block.style.display = "none";
+                } else {
+                    block.style.display = "block";
+                }
+            });
+        }
+
+        function applyProfilePreset(type) {
+            selectedSymptoms.clear();
+            
+            const collections = {
+                mono_pure: ["fever", "fatigue", "sore_throat", "swollen_lymph", "body_aches", "loss_appetite"],
+                strep_throat: ["fever", "sore_throat", "swollen_lymph", "tonsil_exudate", "difficulty_swallowing"],
+                scarlet_fever: ["fever", "sore_throat", "skin_rash", "swollen_lymph", "tonsil_exudate", "difficulty_swallowing"],
+                heart_attack: ["chest_tightness", "shortness_breath", "palpitations", "nausea", "cold_extremities"]
+            };
+
+            if (collections[type]) {
+                collections[type].forEach(id => selectedSymptoms.add(id));
+            }
+
+            document.getElementById("symptom-search").value = "";
+            recalculateDeductions();
+        }
+
+        function clearSymptomEngine() {
+            selectedSymptoms.clear();
+            document.getElementById("symptom-search").value = "";
+            recalculateDeductions();
+        }
+
+        function switchWorkspaceTab(tabId) {
+            const workspaceView = document.getElementById("view-workspace");
+            const guideView = document.getElementById("view-guide");
+            const btnWorkspace = document.getElementById("tab-workspace");
+            const btnGuide = document.getElementById("tab-guide");
+
+            if (tabId === 'workspace') {
+                workspaceView.classList.remove("hidden");
+                guideView.classList.add("hidden");
+                btnWorkspace.classList.add("active");
+                btnGuide.classList.remove("active");
+            } else {
+                workspaceView.classList.add("hidden");
+                guideView.classList.remove("hidden");
+                btnWorkspace.classList.remove("active");
+                btnGuide.classList.add("active");
+            }
+        }
+
+        function recalculateDeductions() {
+            renderSymptomChecklist();
+
+            const query = document.getElementById("symptom-search").value;
+            if (query) executeSymptomSearch();
+
+            const badge = document.getElementById("active-count-badge");
+            badge.textContent = `${selectedSymptoms.size} Checked`;
+            badge.className = selectedSymptoms.size > 0 
+                ? "bg-indigo-600 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl shadow-sm shadow-indigo-100" 
+                : "bg-slate-100 text-slate-600 font-bold text-xs px-2.5 py-1.5 rounded-xl";
+
+            const outputList = document.getElementById("live-deductions-list");
+            const emptyState = document.getElementById("results-empty-state");
+            const criticalAlert = document.getElementById("critical-exclusion-alert");
+
+            if (selectedSymptoms.size === 0) {
+                outputList.innerHTML = "";
+                emptyState.classList.remove("hidden");
+                criticalAlert.classList.add("hidden");
+                return;
+            }
+
+            emptyState.classList.add("hidden");
+
+            // Calculation Logic with Core vs. Optional Probabilistic symptoms:
+            let matches = PATHOLOGIES.map(disease => {
+                const core = disease.coreSymptoms || [];
+                const optional = disease.optionalSymptoms || [];
+                
+                // Track matches
+                const matchedCore = core.filter(sym => selectedSymptoms.has(sym));
+                const matchedOptional = optional.filter(sym => selectedSymptoms.has(sym));
+                const totalCore = core.length;
+                
+                // Match score calculation
+                let coreMatchRatio = totalCore > 0 ? (matchedCore.length / totalCore) : 0;
+                let basePercent = coreMatchRatio * 100;
+                
+                // Optional symptoms add positive value, but do not penalize if unselected
+                let optionalBonus = matchedOptional.length * 8; // adds up to 8% per optional matched symptom
+                let calculatedProbability = Math.min(100, Math.round(basePercent + optionalBonus));
+
+                // Find user selections completely outside the disease's standard profile
+                const unmatchedSelected = Array.from(selectedSymptoms).filter(sym => !core.includes(sym) && !optional.includes(sym));
+                const unmatchedCount = unmatchedSelected.length;
+
+                // Apply Exclusion Noise Penalty
+                let totalPenalty = unmatchedCount * penaltyCoefficient;
+                let finalProbability = Math.max(0, calculatedProbability - totalPenalty);
+
+                return {
+                    ...disease,
+                    matchedCount: matchedCore.length + matchedOptional.length,
+                    matchedCore,
+                    matchedOptional,
+                    totalCore,
+                    totalOptional: optional.length,
+                    unmatchedCount,
+                    finalProbability
+                };
+            });
+
+            // Rank matches (highest final probability score first)
+            matches.sort((a, b) => b.finalProbability - a.finalProbability || b.matchedCount - a.matchedCount);
+
+            // Filter lists to hide conditions with zero active matches
+            const matchedList = matches.filter(m => m.matchedCount > 0);
+
+            if (matchedList.length === 0) {
+                outputList.innerHTML = `
+                    <div class="text-center py-20 text-slate-400">
+                        <i class="fa-solid fa-clipboard-question text-5xl mb-3 text-slate-300"></i>
+                        <p class="text-xs font-semibold">No direct condition matches. Modify selections.</p>
+                    </div>
+                `;
+                criticalAlert.classList.add("hidden");
+                return;
+            }
+
+            // Severe, high-risk disease warnings check
+            const holdsEmergency = matchedList.some(item => 
+                item.urgency === "emergency" && item.finalProbability >= 40
+            );
+
+            if (holdsEmergency) {
+                criticalAlert.classList.remove("hidden");
+            } else {
+                criticalAlert.classList.add("hidden");
+            }
+
+            outputList.innerHTML = "";
+            matchedList.forEach(item => {
+                const card = document.createElement("div");
+
+                let border = "border-slate-100 bg-white hover:border-slate-200";
+                let progressBg = "bg-sky-500";
+                let tagClass = "bg-slate-100 text-slate-600";
+
+                if (item.urgency === "emergency") {
+                    border = "border-rose-100 bg-rose-50/20 hover:border-rose-200";
+                    progressBg = "bg-rose-600";
+                    tagClass = "bg-rose-100 text-rose-700 font-extrabold";
+                } else if (item.urgency === "high") {
+                    border = "border-amber-100 bg-amber-50/10 hover:border-amber-200";
+                    progressBg = "bg-amber-500";
+                    tagClass = "bg-amber-100 text-amber-800 font-bold";
+                }
+
+                card.className = `p-4 rounded-2xl border ${border} shadow-sm card-transition cursor-pointer flex flex-col gap-3`;
+                card.onclick = () => launchDetailedModal(item);
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">${item.name}</h4>
+                                <span class="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-md ${tagClass}">
+                                    ${item.urgency}
+                                </span>
+                            </div>
+                            <span class="text-[11px] text-slate-400 font-semibold tracking-wide block mt-0.5">${item.category}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-base sm:text-lg font-black text-slate-900 font-mono">${item.finalProbability}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full ${progressBg} transition-all duration-500" style="width: ${item.finalProbability}%"></div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 text-[11px]">
+                        <div class="flex items-center justify-between text-slate-400 flex-wrap gap-1">
+                            <span>Matches: <strong class="text-slate-600">${item.matchedCore.length} Core, ${item.matchedOptional.length} Optional</strong></span>
+                            ${item.unmatchedCount > 0 ? `
+                                <span class="text-rose-500 font-medium">Noise Penalty: <strong class="font-mono">-${item.unmatchedCount * penaltyCoefficient}%</strong></span>
+                            ` : `
+                                <span class="text-emerald-600 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Clean Profile Match</span>
+                            `}
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-1">
+                            ${item.matchedCore.map(symId => {
+                                const symMeta = Object.values(SYMPTOM_METADATA).flat().find(s => s.id === symId);
+                                return `<span class="bg-indigo-50 text-indigo-700 font-bold text-[10px] px-2 py-0.5 rounded border border-indigo-100">Core: ${symMeta ? symMeta.name : symId}</span>`;
+                            }).join('')}
+                            ${item.matchedOptional.map(symId => {
+                                const symMeta = Object.values(SYMPTOM_METADATA).flat().find(s => s.id === symId);
+                                return `<span class="bg-sky-50 text-sky-700 font-bold text-[10px] px-2 py-0.5 rounded border border-sky-100">Optional: ${symMeta ? symMeta.name : symId}</span>`;
+                            }).join('')}
+                            ${item.unmatchedCount > 0 ? `
+                                <span class="text-rose-500/80 text-[10px] self-center ml-1">
+                                    + ${item.unmatchedCount} mismatching parameters
+                                </span>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+
+                outputList.appendChild(card);
+            });
+        }
+
+        function launchDetailedModal(disease) {
+            const modal = document.getElementById("inspector-modal");
+            const modalContent = document.getElementById("inspector-modal-content");
+
+            let systemColor = "text-sky-600";
+            let emergencyBanner = "";
+
+            if (disease.urgency === "emergency") {
+                systemColor = "text-rose-600";
+                emergencyBanner = `
+                    <div class="p-3 bg-rose-50 border border-rose-100 text-rose-900 rounded-xl text-xs mb-4 flex gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-base text-rose-500 mt-0.5 animate-pulse"></i>
+                        <span>This diagnostic overlay represents a critical cardiovascular, neurological or metabolic event. Call 911 or visit an ER.</span>
+                    </div>
+                `;
+            }
+
+            modalContent.innerHTML = `
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-slate-400">${disease.category}</span>
+                </div>
+                <h3 class="text-xl font-black text-slate-950 mb-1 flex items-center gap-2">
+                    ${disease.name}
+                </h3>
+                <div class="text-xs font-extrabold ${systemColor} uppercase tracking-wider mb-4">
+                    Classification Score: ${disease.finalProbability}% (${disease.urgency})
+                </div>
+
+                ${emergencyBanner}
+
+                <div class="space-y-4 text-sm text-slate-700">
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-1">Clinical Profile Description</h4>
+                        <p class="leading-relaxed text-slate-600 text-xs sm:text-sm">${disease.description}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-1">Standard Advice Roadmap</h4>
+                        <p class="leading-relaxed text-indigo-800 text-xs sm:text-sm bg-indigo-50 border border-indigo-100 p-3 rounded-xl font-medium">${disease.action}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider mb-2">Diagnostic Markers Overlay</h4>
+                        <div class="flex flex-col gap-2">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600">Core Symptoms (Expected/Required)</span>
+                                <div class="flex flex-wrap gap-1.5 mt-1">
+                                    ${(disease.coreSymptoms || []).map(symId => {
+                                        const metadata = Object.values(SYMPTOM_METADATA).flat().find(s => s.id === symId);
+                                        const isMatched = selectedSymptoms.has(symId);
+                                        const styleClass = isMatched 
+                                            ? "bg-indigo-600 text-white font-extrabold border-indigo-600 shadow-sm" 
+                                            : "bg-slate-100 text-slate-400 border-slate-200/50";
+                                        return `
+                                            <span class="text-xs px-2.5 py-1 rounded-lg border flex items-center gap-1 ${styleClass}">
+                                                ${isMatched ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                                                ${metadata ? metadata.name : symId}
+                                            </span>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600">Optional Symptoms (Might occur / Has a chance)</span>
+                                <div class="flex flex-wrap gap-1.5 mt-1">
+                                    ${(disease.optionalSymptoms || []).map(symId => {
+                                        const metadata = Object.values(SYMPTOM_METADATA).flat().find(s => s.id === symId);
+                                        const isMatched = selectedSymptoms.has(symId);
+                                        const styleClass = isMatched 
+                                            ? "bg-sky-600 text-white font-extrabold border-sky-600 shadow-sm" 
+                                            : "bg-slate-100 text-slate-400 border-slate-200/50";
+                                        return `
+                                            <span class="text-xs px-2.5 py-1 rounded-lg border flex items-center gap-1 ${styleClass}">
+                                                ${isMatched ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                                                ${metadata ? metadata.name : symId}
+                                            </span>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                    <span>Sandboxed Probability Logic</span>
+                    <span>Triage Sandbox System</span>
+                </div>
+            `;
+
+            modal.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeInspectorModal() {
+            const modal = document.getElementById("inspector-modal");
+            modal.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        window.onclick = function(e) {
+            const modal = document.getElementById("inspector-modal");
+            if (e.target === modal) {
+                closeInspectorModal();
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderSymptomChecklist();
+        });
+    </script>
+</body>
+</html>
