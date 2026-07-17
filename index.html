@@ -89,8 +89,8 @@
                     <i class="fa-solid fa-microscope text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black text-slate-900 tracking-tight">DeduceMed <span class="bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">Pro Max V3</span></h1>
-                    <p class="text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">30 Conditions • 115 Clinical Symptoms • Sigmoidal Logic</p>
+                    <h1 class="text-xl font-black text-slate-900 tracking-tight">DeduceMed <span class="bg-gradient-to-r from-emerald-600 to-indigo-600 bg-clip-text text-transparent">Pro Max V3.1</span></h1>
+                    <p class="text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">48 Conditions • 138 Clinical Symptoms • Sigmoidal Logic</p>
                 </div>
             </div>
             
@@ -161,6 +161,9 @@
                     </button>
                     <button onclick="applyProfilePreset('temporal_arteritis')" class="bg-white/10 hover:bg-sky-500/20 border border-sky-500/30 text-white text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
                         <i class="fa-solid fa-eye-slash text-sky-400"></i> Temporal Arteritis (Ocular Threat)
+                    </button>
+                    <button onclick="applyProfilePreset('pneumonia')" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-lungs text-sky-400"></i> Community Pneumonia
                     </button>
                     <button onclick="clearSymptomEngine()" class="text-slate-400 hover:text-white text-xs font-bold px-3 py-2 transition ml-auto flex items-center gap-1">
                         <i class="fa-solid fa-rotate-left"></i> Reset Lab
@@ -331,7 +334,7 @@
     </div>
 
     <script>
-        // Clinical symptoms across categorized pools — common + specific indicators
+        // Clinical symptoms across categorized pools — common + specific indicators (EXPANDED)
         const SYMPTOM_METADATA = {
             general_systemic: [
                 { id: "high_fever_chills", name: "High Fever & Chills" },
@@ -351,7 +354,10 @@
                 { id: "intense_heat_sensitivity", name: "Intense Heat Sensitivity" },
                 { id: "heat_intolerance_tremor", name: "Heat Intolerance with Fine Hand Tremors" },
                 { id: "swollen_tender_lymph_nodes", name: "Swollen/Tender Lymph Nodes" },
-                { id: "poor_appetite_anorexia", name: "Poor Appetite / Anorexia" }
+                { id: "poor_appetite_anorexia", name: "Poor Appetite / Anorexia" },
+                { id: "unintentional_weight_loss", name: "Unintentional Weight Loss" },
+                { id: "night_sweats", name: "Night Sweats" },
+                { id: "malaise", name: "General Malaise / Fatigue" }
             ],
             respiratory_heent: [
                 { id: "dry_persistent_cough", name: "Dry/Persistent Cough" },
@@ -380,7 +386,10 @@
                 { id: "posterior_cervical_adenopathy", name: "Posterior Cervical Lymphadenopathy (Swollen)" },
                 { id: "dry_paroxysmal_cough_whoop", name: "Paroxysmal Cough with Inspiratory Whoop" },
                 { id: "barking_cough", name: "Croupy Barking Cough" },
-                { id: "orthopnea_pnd", name: "Orthopnea (Dyspnea Relieved Sitting Upright)" }
+                { id: "orthopnea_pnd", name: "Orthopnea (Dyspnea Relieved Sitting Upright)" },
+                { id: "stridor", name: "Stridor (High-pitched Inspiratory Sound)" },
+                { id: "productive_cough_with_rust_colored_sputum", name: "Productive Cough with Rust-Colored Sputum" },
+                { id: "nonproductive_cough", name: "Non-productive Dry Cough" }
             ],
             neurological: [
                 { id: "tension_headache", name: "Tension/Mild Headache" },
@@ -405,7 +414,10 @@
                 { id: "temporal_artery_tenderness", name: "Unilateral Temporal Artery Tenderness" },
                 { id: "jaw_claudication", name: "Jaw Claudication (Fatigue with Chewing)" },
                 { id: "unilateral_ptosis_miosis", name: "Unilateral Ptosis and Miosis (Horner's)" },
-                { id: "sudden_unilateral_weakness", name: "Sudden Unilateral Motor Weakness" }
+                { id: "sudden_unilateral_weakness", name: "Sudden Unilateral Motor Weakness" },
+                { id: "seizures", name: "Seizures / Convulsions" },
+                { id: "altered_mental_status", name: "Altered Mental Status / Lethargy" },
+                { id: "focal_neurological_deficit", name: "Focal Neurological Deficit" }
             ],
             digestive_urinary: [
                 { id: "nausea", name: "Nausea" },
@@ -431,7 +443,10 @@
                 { id: "flank_back_pain", name: "Flank/Lower Back Pain" },
                 { id: "sudden_severe_flank_colic", name: "Sudden Agonizing Renal Flank Colic Radiating to Groin" },
                 { id: "painless_jaundice", name: "Painless Progressive Scleral Jaundice" },
-                { id: "clay_colored_stools", name: "Clay-Colored Stools and Dark Tea-Colored Urine" }
+                { id: "clay_colored_stools", name: "Clay-Colored Stools and Dark Tea-Colored Urine" },
+                { id: "right_upper_quadrant_pain", name: "Right Upper Quadrant Pain" },
+                { id: "left_lower_quadrant_pain", name: "Left Lower Quadrant Pain" },
+                { id: "watery_diarrhea", name: "Watery Diarrhea" }
             ],
             musculoskeletal_skin: [
                 { id: "generalized_skin_rash", name: "Generalized Skin Rash" },
@@ -447,7 +462,10 @@
                 { id: "jaundice", name: "Yellowing of Skin/Eyes (Jaundice)" },
                 { id: "easy_bruising_bleeding", name: "Easy Bruising or Bleeding" },
                 { id: "painful_vesicles_dermatomal", name: "Painful Fluid-Filled Vesicles (Dermatomal)" },
-                { id: "petechial_purpuric_rash", name: "Non-Blanching Purple Spots (Purpuric Rash)" }
+                { id: "petechial_purpuric_rash", name: "Non-Blanching Purple Spots (Purpuric Rash)" },
+                { id: "maculopapular_rash", name: "Maculopapular Rash" },
+                { id: "urticarial_rash", name: "Urticarial (Hives) Rash" },
+                { id: "joint_swelling", name: "Joint Swelling / Effusion" }
             ],
             cardiovascular: [
                 { id: "tachycardia", name: "Tachycardia / Fluttering Pulse" },
@@ -458,7 +476,10 @@
                 { id: "syncope", name: "Fainting / Syncope" },
                 { id: "tearing_interscapular_pain", name: "Severe Tearing Chest Pain (Radiates to Back)" },
                 { id: "claudication_calves", name: "Calf Pain/Cramps Triggered by Walking" },
-                { id: "gynaecomastia_palmar_erythema", name: "Palmar Erythema, Vascular Spiders & Gynaecomastia" }
+                { id: "gynaecomastia_palmar_erythema", name: "Palmar Erythema, Vascular Spiders & Gynaecomastia" },
+                { id: "orthopnea", name: "Orthopnea" },
+                { id: "paroxysmal_nocturnal_dyspnea", name: "Paroxysmal Nocturnal Dyspnea" },
+                { id: "jugular_venous_distension", name: "Jugular Venous Distension" }
             ]
         };
 
@@ -471,8 +492,7 @@
             cardiovascular: "Cardiovascular"
         };
 
-        // 85 accurate diseases mapped to weights: 
-        // 3: pathognomonic clinical marker, 2: core clinical criteria, 1: associated indicator, -3: contraindicated (excludes!)
+        // Expanded PATHOLOGIES (48 total)
         const PATHOLOGIES = [
             {
                 name: "Streptococcal Pharyngitis",
@@ -535,7 +555,7 @@
                 prevalence: 0.1,
                 symptoms: {
                     severe_dysphagia_drooling: 3, dysphagia: 2, fever: 2, high_fever_chills: 1,
-                    hoarseness_aphonia: 2, sore_throat: 2, dyspnea: 1,
+                    hoarseness_aphonia: 2, sore_throat: 2, dyspnea: 1, stridor: 3,
                     rhinorrhea_coryza: -3, runny_stuffy_nose: -3, barking_cough: -3,
                     dry_persistent_cough: -3, wet_productive_cough: -3, dry_paroxysmal_cough_whoop: -3
                 },
@@ -615,7 +635,7 @@
                 symptoms: {
                     nuchal_rigidity: 3, fever: 2, high_fever_chills: 2, photophobia_phonophobia: 2, photophobia: 1,
                     petechial_purpuric_rash: 3, generalized_skin_rash: 1, thunderclap_headache: 1,
-                    severe_pulsating_headache: 1, abrupt_fever_with_rigors: 2, extreme_fatigue: 1
+                    severe_pulsating_headache: 1, abrupt_fever_with_rigors: 2, extreme_fatigue: 1, altered_mental_status: 2
                 },
                 urgency: "emergency",
                 description: "Acute bacterial infection of the leptomeninges. Triad of high fever, nuchal rigidity, and photophobia. Non-blanching purpuric spots point heavily to meningococcemia.",
@@ -921,7 +941,7 @@
                 symptoms: {
                     high_fever_chills: 2, fever: 2, abrupt_fever_with_rigors: 1, wet_productive_cough: 2,
                     dyspnea: 2, pleuritic_chest_pain: 2, chest_pain_compression: 1, extreme_fatigue: 1,
-                    hemoptysis: 1, generalized_myalgia: 1
+                    hemoptysis: 1, generalized_myalgia: 1, productive_cough_with_rust_colored_sputum: 2
                 },
                 urgency: "high",
                 description: "Alveolar infection with fever, productive cough, dyspnea, and pleuritic chest pain. May follow influenza or occur independently.",
@@ -1004,7 +1024,128 @@
                 description: "IgE-mediated nasal inflammation triggered by allergens. Paroxysmal sneezing, clear rhinorrhea, and pruritus without fever.",
                 action: "Intranasal corticosteroids, oral antihistamines, allergen avoidance."
             },
+            // === NEW DISEASES ADDED BELOW ===
+            {
+                name: "Congestive Heart Failure (Acute Exacerbation)",
+                category: "Cardiovascular",
+                prevalence: 0.45,
+                symptoms: {
+                    orthopnea: 3, paroxysmal_nocturnal_dyspnea: 3, peripheral_edema: 2, dyspnea: 2,
+                    jugular_venous_distension: 2, tachycardia: 1, cold_hands_feet: 1,
+                    substernal_crushing_pain: -2
+                },
+                urgency: "high",
+                description: "Impaired cardiac pumping leading to fluid backup. Classic orthopnea, PND, and bilateral lower extremity edema.",
+                action: "Diuretics (IV loop), supplemental oxygen, and ACEi/ARB/beta-blocker optimization."
+            },
+            {
+                name: "Viral Gastroenteritis",
+                category: "Gastrointestinal Infectious",
+                prevalence: 0.85,
+                symptoms: {
+                    nausea: 2, vomiting: 2, persistent_diarrhea: 3, abdominal_cramping_bloating: 2,
+                    low_grade_fever: 1, watery_diarrhea: 2, fever: -1
+                },
+                urgency: "low",
+                description: "Common viral infection (norovirus, rotavirus) causing acute watery diarrhea, vomiting, and cramps.",
+                action: "Oral rehydration solution, supportive care, and hand hygiene."
+            },
+            {
+                name: "Migraine with Aura",
+                category: "Neurological",
+                prevalence: 0.6,
+                symptoms: {
+                    severe_pulsating_headache: 3, scintillating_scotoma: 3, photophobia_phonophobia: 2,
+                    nausea: 2, vertigo_dizziness: 1, blurred_double_vision: 1
+                },
+                urgency: "medium",
+                description: "Recurrent unilateral throbbing headache often preceded by visual aura (scintillating scotoma).",
+                action: "Triptans or NSAIDs at onset; preventive therapy (beta-blockers, topiramate) if frequent."
+            },
+            {
+                name: "Diverticulitis",
+                category: "Gastrointestinal Emergency",
+                prevalence: 0.35,
+                symptoms: {
+                    llq_cramping_pain: 3, left_lower_quadrant_pain: 3, fever: 2, abdominal_cramping_bloating: 2,
+                    nausea: 1, vomiting: 1, severe_rlq_pain: -3
+                },
+                urgency: "high",
+                description: "Inflammation of colonic diverticula, typically in the sigmoid colon causing LLQ pain and fever.",
+                action: "Outpatient antibiotics (cipro + metronidazole) if mild; hospitalize if complicated."
+            },
+            {
+                name: "Deep Vein Thrombosis (DVT)",
+                category: "Vascular Emergency",
+                prevalence: 0.25,
+                symptoms: {
+                    claudication_calves: 2, localized_muscle_weakness: 1, swelling: 2, severe_joint_pain_swelling: 1
+                },
+                urgency: "high",
+                description: "Clot formation in deep leg veins. Unilateral leg swelling, pain, and warmth.",
+                action: "Ultrasound confirmation, anticoagulation (DOAC or heparin)."
+            },
+            {
+                name: "Tuberculosis (Pulmonary)",
+                category: "Pulmonary Infectious",
+                prevalence: 0.15,
+                symptoms: {
+                    drenching_night_sweats: 3, severe_unexplained_weight_loss: 2, chronic_cough: 2,
+                    hemoptysis: 2, low_grade_fever: 1, night_sweats: 2, malaise: 1
+                },
+                urgency: "high",
+                description: "Mycobacterium tuberculosis infection. Chronic cough, hemoptysis, weight loss, and night sweats.",
+                action: "Sputum AFB smear/culture, RIPE therapy (Rifampin, Isoniazid, Pyrazinamide, Ethambutol)."
+            },
+            {
+                name: "Rheumatoid Arthritis (Flare)",
+                category: "Rheumatological",
+                prevalence: 0.3,
+                symptoms: {
+                    morning_stiffness_gt_1hr: 3, severe_joint_pain_swelling: 2, joint_swelling: 2,
+                    generalized_myalgia: 1, extreme_fatigue: 1
+                },
+                urgency: "medium",
+                description: "Autoimmune symmetric polyarthritis with prolonged morning stiffness.",
+                action: "DMARDs (methotrexate), short-course steroids for flares."
+            },
+            {
+                name: "Hypoglycemia (Diabetic)",
+                category: "Endocrine Emergency",
+                prevalence: 0.2,
+                symptoms: {
+                    brain_fog_confusion: 2, extreme_fatigue: 1, sweating: 2, tachycardia: 1,
+                    seizures: 1
+                },
+                urgency: "emergency",
+                description: "Low blood glucose causing neuroglycopenic and autonomic symptoms.",
+                action: "Immediate glucose administration (oral or IV dextrose)."
+            },
+            {
+                name: "Bell's Palsy",
+                category: "Neurological",
+                prevalence: 0.25,
+                symptoms: {
+                    unilateral_ptosis_miosis: 2, facial_weakness: 3, numbness_tingling: 1
+                },
+                urgency: "medium",
+                description: "Idiopathic facial nerve (VII) paralysis. Unilateral facial droop.",
+                action: "Prednisone + antivirals (valacyclovir) within 72 hours."
+            },
+            {
+                name: "Pyelonephritis",
+                category: "Genitourinary Infectious",
+                prevalence: 0.3,
+                symptoms: {
+                    flank_back_pain: 3, high_fever_chills: 3, dysuria: 2, hematuria: 1,
+                    nausea: 2, vomiting: 1
+                },
+                urgency: "high",
+                description: "Ascending urinary tract infection involving the kidney. Flank pain + systemic symptoms.",
+                action: "IV antibiotics (ceftriaxone) and hospitalization if severe."
+            }
         ];
+
         const selectedSymptoms = new Set();
         let penaltyCoefficient = 2.5; 
         let sigmoidContrast = 6.0; 
@@ -1105,7 +1246,7 @@
 
             const parentBlocks = document.querySelectorAll("#clues-categories-container > div");
             parentBlocks.forEach(block => {
-                const visible = block.querySelectorAll("button[style='display: flex;'], button:not([style])");
+                const visible = Array.from(block.querySelectorAll("button")).filter(b => b.style.display !== "none");
                 if (visible.length === 0) {
                     block.style.display = "none";
                 } else {
@@ -1121,9 +1262,10 @@
             const collections = {
                 strep_throat: ["bilateral_tonsillar_exudate", "anterior_cervical_adenopathy", "fever", "sore_throat"],
                 mono: ["bilateral_tonsillar_exudate", "posterior_cervical_adenopathy", "fever", "sore_throat", "severe_unexplained_weight_loss"],
-                epiglottitis: ["severe_dysphagia_drooling", "fever", "hoarseness_aphonia", "sore_throat"],
-                pancreatitis: ["epigastric_pain_radiating_back", "abrupt_fever_with_rigors"],
-                temporal_arteritis: ["temporal_artery_tenderness", "jaw_claudication", "monocular_vision_loss"]
+                epiglottitis: ["severe_dysphagia_drooling", "fever", "hoarseness_aphonia", "sore_throat", "stridor"],
+                pancreatitis: ["epigastric_pain_radiating_back", "abrupt_fever_with_rigors", "nausea"],
+                temporal_arteritis: ["temporal_artery_tenderness", "jaw_claudication", "monocular_vision_loss"],
+                pneumonia: ["productive_cough_with_rust_colored_sputum", "high_fever_chills", "dyspnea", "pleuritic_chest_pain"]
             };
 
             if (collections[type]) {
@@ -1232,7 +1374,6 @@
                 let finalLinearScore = Math.max(0, basePercent - contraindicationDeduction - noiseDeduction);
 
                 // Run final linear percentage through the Sigmoidal Separation Curve
-                // S(x) = 100 / (1 + e^(-k * (x - 50)/100))
                 let normalizedX = (finalLinearScore - 50) / 100;
                 let sigmoidalPercent = 100 / (1 + Math.exp(-sigmoidContrast * normalizedX));
 
